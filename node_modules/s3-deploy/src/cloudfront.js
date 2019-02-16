@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk';
+import { AWS } from './utils';
 import util from 'util';
 import * as MSG from './MSG';
 
@@ -9,10 +9,10 @@ import * as MSG from './MSG';
  * @return {Promise} Returns a promise which resolves with a log message of upload status or rejects with an error message
  */
 
-export const invalidate = (distributionId, paths = ['/']) =>
-  new Promise((resolve, reject) => {
+export const invalidate = (distributionId, paths = ['/']) => {
+  const cloudfront = new AWS.CloudFront();
 
-    const cloudfront = new AWS.CloudFront();
+  new Promise((resolve, reject) => {
     const params = {
       DistributionId: distributionId,
       InvalidationBatch: {
@@ -32,3 +32,4 @@ export const invalidate = (distributionId, paths = ['/']) =>
       return resolve(util.format(MSG.INVALIDATE_SUCCESS, paths));
     });
   });
+};

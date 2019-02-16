@@ -1,6 +1,7 @@
 import util from 'util';
 import path from 'path';
 import zlib from 'zlib';
+import globrex from 'globrex';
 
 import AWS from 'aws-sdk';
 import fs from 'co-fs-extra';
@@ -62,7 +63,14 @@ export function deleteRemoved(client, files, options) {
         console.log('allKeys length: %s', allKeys.length);
         const localFiles = files.map(item => item.substr(options.cwd.length));
         console.log('localFiles length: %s', localFiles.length);
-        const toDelete = allKeys.filter(item => !localFiles.includes(item));
+        let toDelete = allKeys.filter(item => !localFiles.includes(item));
+
+        // If deleteRemoved argument is entered, filter files on this pattern
+        if (options.deleteRemoved !== true) {
+          const matchReg = globrex(options.deleteRemoved, { extended: true, globstar: true }).regex;
+          console.log('Filtering files to delete on: ', matchReg);
+          toDelete = toDelete.filter(item => matchReg.test(item));
+        }
 
         if (toDelete.length > 0) {
 

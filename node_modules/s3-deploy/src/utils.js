@@ -1,6 +1,9 @@
+import AWS from 'aws-sdk';
 import crypto from 'crypto';
 import path from 'path';
 import mime from 'mime';
+
+export { AWS as AWS };
 
 /**
  * Gets the content type of the file, based on it's extension.
