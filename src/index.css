@@ -1,0 +1,309 @@
+@font-face {
+  font-family: 'SharpBold';
+  src: url("./assets/fonts/SharpGroteskDBSmBold22.ttf") format("truetype"); }
+
+@font-face {
+  font-family: 'Sharp';
+  src: url("./assets/fonts/SharpGroteskDBBook22.ttf") format("truetype"); }
+
+#root {
+  height: 100%;
+  width: 100%; }
+
+.App {
+  height: 100%;
+  width: 100%; }
+
+html {
+  min-width: 100%;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Sharp', sans-serif;
+  color: #010c16;
+  font-weight: 400;
+  height: calc(100% - 69px);
+  width: 100%; }
+
+button {
+  font-family: 'SharpBold', sans-serif;
+  margin: 6px;
+  line-height: 1.42;
+  padding: 0.7em 1.4em;
+  border-width: 3px;
+  border-style: solid;
+  background: transparent;
+  border-radius: 0;
+  border-color: #A736FF;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: bottom;
+  position: relative;
+  transform: translate(0.5em -0.4em);
+  transition: transform 0.2s;
+  color: #A736FF; }
+
+.theta .btn:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  transform: translate(0.6em, -0.3em);
+  transition: transform 0.2s, background-color 0.2s; }
+
+.secondaryButton {
+  background: transparent;
+  border: solid 1px #1168df;
+  outline-offset: -1px;
+  color: #1168df;
+  transition: background-color .8s ease; }
+  .secondaryButton:hover {
+    color: white;
+    background-color: #1168df;
+    border: solid 1px transparent;
+    transition: background-color .8s ease; }
+
+.tertiaryButton {
+  background-color: transparent;
+  border: solid 1px #474747;
+  color: #7a7a7a;
+  box-shadow: none;
+  transition: background-color .8s ease; }
+  .tertiaryButton:hover {
+    color: white;
+    background-color: #474747;
+    border: solid 1px transparent;
+    transition: background-color .8s ease; }
+
+.fourthButton {
+  color: white;
+  font-size: .8em;
+  color: white;
+  background: rgba(0, 0, 0, 0.404);
+  padding: .8em 1.3em;
+  -webkit-transition: background-color .4s ease;
+  -o-transition: background-color .4s ease;
+  transition: background-color .4s ease; }
+
+.unstyledButton {
+  padding: 0;
+  color: #1168df;
+  background-color: transparent;
+  -webkit-transition: color .4s ease;
+  -o-transition: color .4s ease;
+  transition: color .4s ease;
+  border: none; }
+  .unstyledButton:hover {
+    color: #0950b0;
+    padding: 0;
+    background-color: transparent;
+    border: none; }
+
+button:hover {
+  cursor: pointer; }
+
+input,
+textarea,
+select,
+li,
+a,
+p {
+  color: #010c16;
+  font-weight: 400;
+  font-family: 'Sharp', sans-serif; }
+
+input,
+textarea,
+select,
+button,
+li,
+a,
+p {
+  text-decoration: none;
+  font-size: 14px;
+  list-style: none;
+  line-height: 18px; }
+
+button {
+  font-weight: 800; }
+
+textarea,
+input,
+li,
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #010c16;
+  margin: 0; }
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 800;
+  font-family: 'SharpBold', sans-serif; }
+
+ul {
+  margin: 0; }
+
+input:focus {
+  border-radius: 5px; }
+
+.webThreeBanner {
+  width: 100vw;
+  height: 54px;
+  background: #1168df;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  transition: all .5s ease; }
+  .webThreeBanner p {
+    color: white; }
+
+.signInFromPublicProfileBanner {
+  width: 100vw;
+  height: 54px;
+  background: #1168df;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  transition: all .5s ease; }
+  .signInFromPublicProfileBanner .signInFromPublicProfileBanner__wrapper {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .signInFromPublicProfileBanner p {
+    color: white;
+    width: fit-content; }
+  .signInFromPublicProfileBanner .webThreeBanner__close {
+    width: 5%; }
+
+.hideBanner.signInFromPublicProfileBanner {
+  display: none; }
+
+.hideBanner {
+  top: -54px;
+  background: white; }
+  .hideBanner button {
+    background-color: white; }
+
+.webThreeBanner__link {
+  border: 1px solid white;
+  margin-left: 24px;
+  padding: .6em .9em;
+  color: white; }
+
+.webThreeBanner__close {
+  position: absolute;
+  right: 24px;
+  cursor: pointer; }
+
+.header {
+  font-size: 1.1em;
+  color: #a8a8a8;
+  font-weight: 500; }
+
+.subheader {
+  color: #a8a8a8;
+  margin-bottom: .5em; }
+
+.subtext {
+  color: #a8a8a8; }
+
+.bold {
+  font-weight: 700; }
+
+.grey {
+  color: #a8a8a8; }
+
+.blue {
+  color: #006ECC; }
+
+.light {
+  color: #6b6b6b; }
+
+.lighter {
+  color: #9b9b9b; }
+
+.white {
+  color: white; }
+
+.lightOpacity {
+  opacity: .6; }
+
+.clearProfPic {
+  background-color: white !important; }
+
+@media only screen and (max-width: 600px) {
+  .webThreeBanner {
+    display: none; }
+  .signInFromPublicProfileBanner {
+    height: 64px;
+    width: 100vw;
+    background: #1168df;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease; }
+    .signInFromPublicProfileBanner p {
+      color: white;
+      width: 85%; }
+    .signInFromPublicProfileBanner .signInFromPublicProfileBanner__wrapper {
+      width: 90%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; }
+    .signInFromPublicProfileBanner .webThreeBanner__close {
+      width: 5%; }
+  input[type="color"],
+  input[type="date"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="email"],
+  input[type="month"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="text"],
+  input[type="time"],
+  input[type="url"],
+  input[type="week"],
+  select:focus,
+  textarea {
+    font-size: 16px; } }

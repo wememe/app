@@ -1,0 +1,11 @@
+.meme__tile {
+  height: 300px;
+  width: 300px;
+  border-radius: 6px;
+  border: solid 1px #d1d1d1; }
+
+.meme__tile__image {
+  background-color: #eeeeee;
+  height: 60%;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px; }

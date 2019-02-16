@@ -1,0 +1,104 @@
+@import "../../variables.scss";
+
+
+.createPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+}
+
+.create__guide {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 80vw;
+  margin-bottom: 20px;
+}
+
+.progress__wrapper {
+  width: 80vw;
+}
+
+.progress__steps {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress__bar__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.progress__bar {
+  height: 4px;
+  width: 33.3333%;
+  background-color: purple;
+}
+
+.grey {
+  background-color: #d4d4d4;
+}
+
+.canvas__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
+  position: relative;
+}
+
+.canvas {
+  width: 100%;
+  background-color: #d4d4d4;
+  height: 60vh;
+  display: block;
+  object-fit: cover;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  transition: all .5s ease;
+}
+
+.canvas__upload--wrapper{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.canvas__upload {
+  z-index: 100;
+  border-radius: 2em;
+  -webkit-transition: background-color .4s ease;
+  -o-transition: background-color .4s ease;
+  transition: background-color .4s ease;
+
+  font-family: 'SharpBold', sans-serif;
+  margin: 6px;
+  line-height: 18px;
+  font-size: 14px;
+  padding: 0.7em 1.4em;
+  border-width: 3px;
+  border-style: solid;
+  background: transparent;
+  border-radius: 0;
+  border-color: #A736FF;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: bottom;
+  position: relative;
+  transform: translate(0.5em -0.4em);
+  transition: transform 0.2s;
+  color: #A736FF;
+}
