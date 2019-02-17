@@ -26,6 +26,9 @@ class Buy extends Component {
       shareValue: 0,
       memeURL: '',
       price: 0,
+      creator1: '',
+      creator2: '',
+      creator3: '',
       memeId: this.props.history.location.pathname.split('/')[2],
     };
   }
@@ -37,8 +40,16 @@ class Buy extends Component {
     if (wememeContract.content) {
       wememeContract.content.call(memeId, (e, content) => {
         this.setState({ memeURL: content });
-        wememeContract.poolBalance.call(memeId, (e, price) => {
-          this.setState({ price: web3.fromWei(price, 'ether').toNumber() }) // eslint-disable-line no-undef
+        wememeContract.creators.call(memeId, 0, (e, creator1) => {
+          wememeContract.creators.call(memeId, 1, (e, creator2) => {
+            wememeContract.creators.call(memeId, 2, (e, creator3) => {
+              this.setState({
+                creator1,
+                creator2,
+                creator3,
+              })
+            });
+          });
         });
       })
     }
@@ -59,7 +70,13 @@ class Buy extends Component {
   }
 
   render() {
-    const { memeURL, price } = this.state;
+    const {
+      memeURL,
+      price,
+      creator1,
+      creator2,
+      creator3,
+    } = this.state;
 
     return (
       <div className="createPage">
@@ -77,7 +94,14 @@ class Buy extends Component {
           <img src={memeURL} alt="" className="canvas__buy" />
         </div>
 
-      </div>
+        <div>{creator1}</div>
+        <div>{creator2}</div>
+        <div>{creator3}</div>
+        {/* <threebox-address data-address={creator1}></threebox-address> */}
+        {/* <threebox-address data-address={creator2}></threebox-address> */}
+        {/* <threebox-address data-address={creator3}></threebox-address> */}
+
+      </div >
     );
   }
 }
