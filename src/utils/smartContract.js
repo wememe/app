@@ -697,15 +697,13 @@ export const startWeMeme = async () => {
 }
 
 export const getMemes = () => {
-  console.log('hit memes')
   const wememeContract = store.getState().threeBox.wememeContract;
-  console.log(wememeContract);
 
   wememeContract.topId.call((e, r) => {
     const topId = r.toNumber()
     const forDraw = [];
     const forCaption = [];
-    const forSale = [];
+    const forMarket = [];
     const forGallery = [];
     let count = 0;
 
@@ -716,7 +714,7 @@ export const getMemes = () => {
           type: 'UPDATE_MEMES',
           forDraw,
           forCaption,
-          forSale,
+          forMarket,
           forGallery,
           topId,
         })
@@ -759,7 +757,7 @@ export const getMemes = () => {
                 checkEndAndUpdateState();
               } else {
                 // available for purchase
-                forSale.push({
+                forMarket.push({
                   id: i,
                   content,
                   price: staked.toNumber(),

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import FabricLib from 'fabric'
 import { SketchPicker } from 'react-color'
 
-import { waitForMined } from '../utils/smartContract';
+import { waitForMined, getMemes } from '../utils/smartContract';
 import { FileSizeModal } from '../components/Modals';
 import Kittie from '../assets/Kittie.gif'
 import './styles/Create.css';
@@ -25,9 +25,14 @@ class Draw extends Component {
       canvas: null,
       memeId: this.props.history.location.pathname.split('/')[2]
     };
+
   }
 
   componentDidMount() {
+    const { wememeContract } = this.props;
+    const { memeId } = this.state;
+    let imageUrl;
+
     const canvas = new fabric.Canvas('c', {
       selection: false,
       uniScaleTransform: false,
@@ -36,30 +41,16 @@ class Draw extends Component {
     });
     canvas.uniScaleTransform = true;
     this.setState({ canvas });
-  }
-
-  componentDidMount(nextProps) {
-    const { wememeContract } = this.props;
-    const { memeId, canvas } = this.state;
-    let imageUrl;
 
     if (wememeContract.content) {
       wememeContract.content.call(memeId, (e, content) => {
         imageUrl = content;
-        canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
-          // should the image be resized to fit the container?
-          // TODO not working....??
-          backgroundImageStretch: true,
-          opacity: 1,
-          scaleX: canvas.width / imageUrl.width,
-          scaleY: canvas.height / imageUrl.height,
-          // width: canvas.width,
-          // height: canvas.height,
-          left: 0,
-          top: 0,
-          originX: 'left',
-          originY: 'top',
-          crossOrigin: 'anonymous'
+        fabric.Image.fromURL(content, function (img) {
+          canvas.setBackgroundImage(content, canvas.renderAll.bind(canvas), {
+            scaleX: canvas.width / img.width,
+            scaleY: canvas.height / img.height,
+            crossOrigin: 'anonymous'
+          });
         });
       })
     }
@@ -70,17 +61,20 @@ class Draw extends Component {
     const { memeId, canvas } = this.state;
     let imageUrl;
 
-    wememeContract.content.call(memeId, (e, content) => {
-      imageUrl = content;
-      fabric.Image.fromURL(content, function(img) {
-        canvas.setBackgroundImage(content, canvas.renderAll.bind(canvas), {
-           scaleX: canvas.width / img.width,
-           scaleY: canvas.height / img.height,
-           crossOrigin: 'anonymous'
+    if (wememeContract.content !== this.props.wememeContract.content) {
+      wememeContract.content.call(memeId, (e, content) => {
+        imageUrl = content;
+        fabric.Image.fromURL(content, function (img) {
+          canvas.setBackgroundImage(content, canvas.renderAll.bind(canvas), {
+            scaleX: canvas.width / img.width,
+            scaleY: canvas.height / img.height,
+            crossOrigin: 'anonymous'
+          });
         });
-     });
-    })
+      })
+    }
   }
+
 
   addText = () => {
     var newID = (new Date()).getTime().toString().substr(5);
@@ -117,6 +111,12 @@ class Draw extends Component {
     }
   }
 
+  saveToIpfs = buffer => window.fetch('https://ipfs.infura.io:5001/api/v0/add', {
+    method: 'post',
+    'Content-Type': 'multipart/form-data',
+    body: buffer,
+  });
+
   saveImage = async () => {
     // const image = this.state.canvas.toDataURL("image/png");
     const canvasElement = document.getElementById('c')
@@ -128,41 +128,39 @@ class Draw extends Component {
         const fetch = await this.saveToIpfs(formData);
         const returnedData = await fetch.json();
         const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
-        console.log(content)
         resolve(content)
       });
     })
-
-    // console.log(image)
   }
 
   addLayer = () => {
 
   }
 
-  saveToIpfs = buffer => window.fetch('https://ipfs.infura.io:5001/api/v0/add', {
-    method: 'post',
-    'Content-Type': 'multipart/form-data',
-    body: buffer,
-  });
-
   fontChange = (e) => {
-    console.log(e.target.value)
     this.setTextParam('fontFamily', e.target.value)
-    // console.log('asdfsadf')
   }
 
   onColorChange = (obj) => {
     this.setTextParam('color', obj.hex)
   }
 
+  handleSlider = (e) => {
+    const { wememeContract } = this.props;
+    const { memeId } = this.state;
+    const numberOfShares = e.target.value;
+
+    wememeContract.priceToMint.call(memeId, numberOfShares, (err, price) => {
+      const shareValue = web3.fromWei(price.toNumber(), 'ether') // eslint-disable-line no-undef
+      this.setState({ numberOfShares, shareValue });
+    })
+  }
+
   updateMeme = async () => {
     const { buffer, numberOfShares, memeId } = this.state;
     const { wememeContract, address, history } = this.props;
 
-    const fetch = await this.fetchPic(buffer);
-    const returnedData = await fetch.json();
-    const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
+    const content = await this.saveImage();
 
     wememeContract.priceToMint.call(memeId, numberOfShares, (e, price) => {
       wememeContract.meme(memeId, numberOfShares, content, {
@@ -173,6 +171,7 @@ class Draw extends Component {
         this.setState({ imageLoading: true });
         waitForMined(txHash).then(res => {
           this.setState({ imageLoading: false })
+          getMemes();
           history.push('/');
         });
       })
@@ -252,8 +251,6 @@ class Draw extends Component {
               </select>
 
               <SketchPicker onChange={this.onColorChange} />
-
-              <button onClick={this.saveImage.bind(this)}> save </button>
             </div>
 
             <div>
@@ -261,11 +258,12 @@ class Draw extends Component {
               <button
                 type="submit"
                 className="canvas__save"
-                disabled={disableSave}
-                onClick={() => this.createMeme()}
+                // disabled={disableSave}
+                onClick={() => this.updateMeme()}
               >
                 Submit
             </button>
+
               {/* </Link> */}
             </div>
           </div>
@@ -273,16 +271,6 @@ class Draw extends Component {
 
         <div className="meme__metaData">
         </div>
-
-        <Link to="/sell">
-          <button
-            type="submit"
-          // disabled={disableSave}
-          >
-            Sell
-          </button>
-        </Link>
-
       </div>
     );
   }

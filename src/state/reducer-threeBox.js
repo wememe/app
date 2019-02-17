@@ -14,7 +14,7 @@ export const threeBoxReducer = (state = {}, action) => {
         ...state,
         forDraw: action.forDraw,
         forCaption: action.forCaption,
-        forSale: action.forSale,
+        forMarket: action.forMarket,
         forGallery: action.forGallery,
       };
 

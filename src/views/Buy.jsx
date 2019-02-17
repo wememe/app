@@ -16,22 +16,19 @@ class Buy extends Component {
   }
 
   render() {
+    const { forMarket } = this.props;
     return (
       <div className="buyPage">
 
-        <div className="create__guide">
+        <div className="gallery__headline">
           <h2>Meme Market</h2>
           <p>Begin by uploading an image you think would make for a great beginning of a meme.</p>
         </div>
 
         <div className="buy__grid">
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
+          {forMarket.map((meme, i) => (
+            <MemeTile key={i} meme={meme} />
+          ))}
         </div>
 
       </div>
@@ -48,6 +45,7 @@ Buy.propTypes = {
   isLoadingPublicProfile: PropTypes.bool,
   showSignInBanner: PropTypes.bool,
   currentAddress: PropTypes.string,
+  forMarket: PropTypes.array,
 };
 
 Buy.defaultProps = {
@@ -56,10 +54,11 @@ Buy.defaultProps = {
   isLoadingPublicProfile: true,
   showSignInBanner: false,
   currentAddress: '',
+  forMarket: [],
 };
 
 const mapState = state => ({
-  // currentAddress: state.threeBox.currentAddress,
+  forMarket: state.threeBox.forMarket,
 });
 
 export default withRouter(connect(mapState,

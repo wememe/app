@@ -7,7 +7,7 @@ import { SketchPicker } from 'react-color'
 
 import Kittie from '../assets/Kittie.gif'
 import { FileSizeModal } from '../components/Modals';
-import { waitForMined } from '../utils/smartContract';
+import { waitForMined, getMemes } from '../utils/smartContract';
 import './styles/Create.css';
 import { resolve } from 'dns';
 import { reject } from 'q';
@@ -117,6 +117,7 @@ class Draw extends Component {
         waitForMined(txHash).then(res => {
           this.setState({ imageLoading: false })
           history.push('/');
+          getMemes();
         });
       })
     })
@@ -199,10 +200,7 @@ class Draw extends Component {
   componentWillReceiveProps(nextProps) {
     const { wememeContract } = nextProps;
     const { memeId, canvas } = this.state;
-    let imageUrl;
 
-    const that = this
-    console.log('youoo')
     wememeContract.content.call(memeId, (e, content) => {
       this.changeBackground(content)
     })

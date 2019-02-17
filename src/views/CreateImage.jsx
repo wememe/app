@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { FileSizeModal } from '../components/Modals';
-import { waitForMined } from '../utils/smartContract';
+import {
+  waitForMined,
+  getMemes
+} from '../utils/smartContract';
 import Kittie from '../assets/Kittie.gif'
 import './styles/Create.css';
 
@@ -71,6 +74,7 @@ class ProfilePublic extends Component {
           waitForMined(txHash).then(res => {
             this.setState({ imageLoading: false })
             history.push('/');
+            getMemes();
           });
         })
       })
