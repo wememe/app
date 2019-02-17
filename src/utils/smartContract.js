@@ -781,7 +781,7 @@ export const waitForMined = (txHash) => {
       } else if (receipt == null) {
         setTimeout(() => transactionReceiptAsync(resolve, reject), 500);
       } else {
-        setTimeout(() => resolve(receipt), 500);
+        setTimeout(() => resolve(receipt), 1500);
       }
     });
   };

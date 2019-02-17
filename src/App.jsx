@@ -20,6 +20,7 @@ import Privacy from './views/Privacy';
 import Terms from './views/Terms';
 import Create from './views/Create';
 import Buy from './views/Buy';
+import BuyView from './views/BuyView';
 import Gallery from './views/Gallery';
 import CaptionGallery from './views/CaptionGallery';
 import DrawGallery from './views/DrawGallery';
@@ -121,6 +122,18 @@ class App extends Component {
             exact
             path="/gallery"
             component={Gallery}
+          />
+
+          <Route
+            exact
+            path="/buy"
+            component={Buy}
+          />
+
+          <Route
+            exact
+            path="/buy/:memeId"
+            component={BuyView}
           />
 
           <Route

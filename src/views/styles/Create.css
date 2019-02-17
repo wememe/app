@@ -89,6 +89,19 @@
   -o-transition: all .5s ease;
   transition: all .5s ease; }
 
+.canvas__buy {
+  width: 100%;
+  background-color: #d4d4d4;
+  height: 100%;
+  max-height: 70vh;
+  max-width: 90vw;
+  display: block;
+  object-fit: cover;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  transition: all .5s ease; }
+
 .upper-canvas {
   width: 100% !important;
   height: 50vh !important;
