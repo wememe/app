@@ -45,9 +45,11 @@ class Draw extends Component {
     contextBase.drawImage(layer1, 0, 0);
     contextBase.drawImage(layer2, 0, 0);
     // const image = base.toDataURL("image/png");
-    const image = base.toBlob(async (res) => {
-      console.log(res)
-      const fetch = await this.saveToIpfs(res);
+    const image = contextBase.toBlob(async (blob) => {
+      console.log(blob)
+      const formData = new FormData()
+      formData.append('inputdata', blob, 'filename')
+      const fetch = await this.saveToIpfs(formData);
       const returnedData = await fetch.json();
       const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
       console.log(content)
