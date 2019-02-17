@@ -21,7 +21,7 @@ class CaptionGallery extends Component {
     return (
       <div className="buyPage">
 
-        <div className="create__guide">
+        <div className="gallery__headline">
           <h2>Caption Gallery</h2>
           <p>Find a work by two users to give a caption.</p>
         </div>

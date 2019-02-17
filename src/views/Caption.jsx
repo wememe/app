@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import FabricLib from 'fabric'
 import { SketchPicker } from 'react-color'
 
-
+import { waitForMined } from '../utils/smartContract';
 import { FileSizeModal } from '../components/Modals';
 import Kittie from '../assets/Kittie.gif'
 import './styles/Create.css';
@@ -21,6 +21,7 @@ class Draw extends Component {
       showFileSizeModal: false,
       numberOfShares: 100,
       shareValue: 0,
+      imageLoading: false,
       canvas: null,
       memeId: this.props.history.location.pathname.split('/')[2]
     };
@@ -29,12 +30,39 @@ class Draw extends Component {
   componentDidMount() {
     const canvas = new fabric.Canvas('c', {
       selection: false,
-      uniScaleTransform: true,
+      uniScaleTransform: false,
       width: 600,
       height: 400
     });
     canvas.uniScaleTransform = true;
     this.setState({ canvas });
+  }
+
+  componentDidMount(nextProps) {
+    const { wememeContract } = this.props;
+    const { memeId, canvas } = this.state;
+    let imageUrl;
+
+    if (wememeContract.content) {
+      wememeContract.content.call(memeId, (e, content) => {
+        imageUrl = content;
+        canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
+          // should the image be resized to fit the container?
+          // TODO not working....??
+          backgroundImageStretch: true,
+          opacity: 1,
+          scaleX: canvas.width / imageUrl.width,
+          scaleY: canvas.height / imageUrl.height,
+          // width: canvas.width,
+          // height: canvas.height,
+          left: 0,
+          top: 0,
+          originX: 'left',
+          originY: 'top',
+          crossOrigin: 'anonymous'
+        });
+      })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,7 +84,7 @@ class Draw extends Component {
 
   addText = () => {
     var newID = (new Date()).getTime().toString().substr(5);
-    var text = new fabric.IText('Time to meme!', {
+    var text = new fabric.IText('Meme it uuup!', {
       fontFamily: 'arial black',
       left: 100,
       top: 100,
@@ -128,6 +156,29 @@ class Draw extends Component {
     this.setTextParam('color', obj.hex)
   }
 
+  updateMeme = async () => {
+    const { buffer, numberOfShares, memeId } = this.state;
+    const { wememeContract, address, history } = this.props;
+
+    const fetch = await this.fetchPic(buffer);
+    const returnedData = await fetch.json();
+    const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
+
+    wememeContract.priceToMint.call(memeId, numberOfShares, (e, price) => {
+      wememeContract.meme(memeId, numberOfShares, content, {
+        from: address,
+        value: price
+      }, (e, txHash) => {
+        // push user to home page
+        this.setState({ imageLoading: true });
+        waitForMined(txHash).then(res => {
+          this.setState({ imageLoading: false })
+          history.push('/');
+        });
+      })
+    })
+  }
+
   render() {
     const { disableSave, showFileSizeModal, numberOfShares, shareValue } = this.state;
 
@@ -155,36 +206,12 @@ class Draw extends Component {
           </div>
         </div>
 
-        <div>
-          <canvas id="c" />
-        </div>
-
-        <button id="add" type="button" onClick={this.addText.bind(this)}>add</button>
-
-        <select class="select2 font-change" data-type="fontFamily" onChange={this.fontChange.bind(this)}>
-          <option value="Arial">Arial</option>
-          <option value="Arial Black">Arial Black</option>
-          <option value="Impact">Impact</option>
-          <option value="Tahoma">Tahoma</option>
-          <option value="Times New Roman">Times New Roman</option>
-        </select>
-      <button onClick={this.saveImage.bind(this)}> save </button>
-        <SketchPicker onChange={this.onColorChange} />
-
-
-
         <div className="canvas__wrapper">
           <div className="canvas__canvas">
-            {(this.coverUpload && this.coverUpload.files && this.coverUpload.files[0])
-              ? (
-                <img
-                  className="canvas"
-                  alt="profile"
-                  src={(this.coverUpload && this.coverUpload.files && this.coverUpload.files[0])
-                    && URL.createObjectURL(this.coverUpload.files[0])}
-                />)
-              : <div className="canvas" />
-            }
+            <canvas
+              id="c"
+            // className="canvas" 
+            />
           </div>
 
           <div className="canvas__controls">
@@ -213,7 +240,20 @@ class Draw extends Component {
             </div>
 
             <div className="canvas__controls__shares">
-              <img src={Kittie} alt="" />
+              {/* <img src={Kittie} alt="" /> */}
+              <button id="add" type="button" onClick={this.addText.bind(this)}>add</button>
+
+              <select class="select2 font-change" data-type="fontFamily" onChange={this.fontChange.bind(this)}>
+                <option value="Arial">Arial</option>
+                <option value="Arial Black">Arial Black</option>
+                <option value="Impact">Impact</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Times New Roman">Times New Roman</option>
+              </select>
+
+              <SketchPicker onChange={this.onColorChange} />
+
+              <button onClick={this.saveImage.bind(this)}> save </button>
             </div>
 
             <div>

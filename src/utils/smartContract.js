@@ -723,8 +723,6 @@ export const getMemes = () => {
       }
     }
 
-    console.log('topId', topId)
-
     for (let i = 0; i < topId; i++) {
       wememeContract.num.call(i, (e, num) => {
         wememeContract.content.call(i, (e, content) => {
@@ -776,3 +774,18 @@ export const getMemes = () => {
     }
   })
 }
+
+export const waitForMined = (txHash) => {
+  const transactionReceiptAsync = function (resolve, reject) {
+    web3.eth.getTransactionReceipt(txHash, (error, receipt) => { // eslint-disable-line no-undef
+      if (error) {
+        reject(error);
+      } else if (receipt == null) {
+        setTimeout(() => transactionReceiptAsync(resolve, reject), 500);
+      } else {
+        setTimeout(() => resolve(receipt), 500);
+      }
+    });
+  };
+  return new Promise(transactionReceiptAsync);
+};

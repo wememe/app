@@ -16,22 +16,20 @@ class Buy extends Component {
   }
 
   render() {
+    const { forGallery } = this.props;
+
     return (
       <div className="buyPage">
 
-        <div className="create__guide">
+        <div className="gallery__headline">
           <h2>Meme Gallery</h2>
           <p>Gander completed works by the community.</p>
         </div>
 
         <div className="buy__grid">
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
+          {forGallery.map((meme, i) => (
+            <MemeTile key={i} meme={meme} />
+          ))}
         </div>
 
       </div>
@@ -48,6 +46,7 @@ Buy.propTypes = {
   isLoadingPublicProfile: PropTypes.bool,
   showSignInBanner: PropTypes.bool,
   currentAddress: PropTypes.string,
+  forGallery: PropTypes.array,
 };
 
 Buy.defaultProps = {
@@ -56,10 +55,11 @@ Buy.defaultProps = {
   isLoadingPublicProfile: true,
   showSignInBanner: false,
   currentAddress: '',
+  forGallery: [],
 };
 
 const mapState = state => ({
-  // currentAddress: state.threeBox.currentAddress,
+  forGallery: state.threeBox.forGallery,
 });
 
 export default withRouter(connect(mapState,

@@ -67,215 +67,23 @@ class App extends Component {
     super(props);
     this.state = {
     };
-    this.handleSignInUp = this.handleSignInUp.bind(this);
-    this.directSignIn = this.directSignIn.bind(this);
   }
 
   async componentDidMount() {
     await startWeMeme();
     getMemes();
-    // get for draw
-    // get for caption
-    // get for gallery
-    // get for buy
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { location } = nextProps;
-    const { pathname } = location;
-    const normalizedPath = normalizeURL(pathname);
-
-    // check previous route for banner behavior on /Create & /Profiles
-    // does not work with back button
-    if (nextProps.location.pathname !== normalizedPath) {
-      store.dispatch({
-        type: 'UPDATE_ROUTE',
-        currentRoute: normalizedPath,
-      });
-    }
-
-    // get profile data again only when onSyncDone
-    if (nextProps.onSyncFinished && nextProps.isSyncing) {
-      // end onSyncDone animation
-      store.dispatch({
-        type: 'APP_SYNC',
-        onSyncFinished: true,
-        isSyncing: false,
-      });
-
-      this.loadCalls();
-    }
-  }
-
-  handleNextMobileModal = (thisModal, nextModal) => {
-    this.setState({
-      [`onBoardingModalMobile${thisModal}`]: false,
-      [`onBoardingModalMobile${nextModal}`]: true,
-    });
-  }
-
-  loadCalls = () => {
-    this.props.getActivity();
-    this.props.getVerifiedPublicGithub();
-    this.props.getVerifiedPublicTwitter();
-    this.props.getPublicMemberSince();
-    this.props.getProfileData('public', 'status');
-    this.props.getProfileData('public', 'name');
-    this.props.getProfileData('public', 'description');
-    this.props.getProfileData('public', 'image');
-    this.props.getProfileData('public', 'coverPhoto');
-    this.props.getProfileData('public', 'location');
-    this.props.getProfileData('public', 'website');
-    this.props.getProfileData('public', 'employer');
-    this.props.getProfileData('public', 'job');
-    this.props.getProfileData('public', 'school');
-    this.props.getProfileData('public', 'degree');
-    this.props.getProfileData('public', 'major');
-    this.props.getProfileData('public', 'year');
-    this.props.getProfileData('public', 'emoji');
-    this.props.getProfileData('private', 'email');
-    this.props.getProfileData('private', 'birthday');
-  }
-
-  async directSignIn() {
-    const { location } = this.props;
-    const { pathname } = location;
-    const normalizedPath = normalizeURL(pathname);
-
-    await this.props.checkWeb3Wallet();
-    await this.props.requestAccess('directLogin');
-    await this.props.checkNetwork();
-
-    if (this.props.isSignedIntoWallet && this.props.isLoggedIn) {
-      await this.props.getBox();
-      if (!this.props.showErrorModal) {
-        this.loadCalls();
-      }
-    } else if (!this.props.isSignedIntoWallet) {
-      history.push(routes.LANDING);
-      this.props.handleRequireWalletLoginModal();
-    } else if (this.props.isSignedIntoWallet
-      && !this.props.isLoggedIn
-      && matchProtectedRoutes(normalizedPath.split('/')[2])) {
-      history.push(routes.LANDING);
-      this.props.handleSignInModal();
-    }
-  }
-
-  async handleSignInUp() {
-    if (typeof window.web3 !== 'undefined') {
-      await this.props.checkWeb3Wallet();
-      await this.props.requestAccess(); // this is not working for cb
-      await this.props.checkNetwork();
-
-      if (this.props.isSignedIntoWallet) {
-        await this.props.getBox('fromSignIn');
-        if (!this.props.showErrorModal) {
-          this.loadCalls();
-        }
-      } else if (!this.props.isSignedIntoWallet && !this.props.accessDeniedModal) {
-        this.props.handleRequireWalletLoginModal();
-      }
-    } else if (typeof window.web3 === 'undefined') {
-      this.props.requireMetaMaskModal();
-      this.props.handleMobileWalletModal();
-    }
   }
 
   render() {
     const {
-      showDifferentNetworkModal,
-      accessDeniedModal,
       errorMessage,
-      allowAccessModal,
-      alertRequireMetaMask,
-      provideConsent,
-      signInToWalletModal,
-      signInModal,
-      mobileWalletRequiredModal,
-      directLogin,
-      loggedOutModal,
-      switchedAddressModal,
-      prevNetwork,
-      currentNetwork,
-      onBoardingModal,
-      onBoardingModalTwo,
-      ifFetchingThreeBox,
-      prevAddress,
       showErrorModal,
       isLoggedIn,
       isSignedIntoWallet,
-      showDownloadBanner,
-      // location,
-      onSyncFinished,
-      isSyncing,
-      hasSignedOut,
-      // onPublicProfilePage,
-      // currentAddress,
     } = this.props;
-
-    // const { pathname } = location;
-    // const normalizedPath = normalizeURL(pathname);
-    const mustConsentError = errorMessage && errorMessage.message && errorMessage.message.substring(0, 65) === 'Error: MetaMask Message Signature: User denied message signature.';
-    // const landing = pathname === routes.LANDING ? 'landing' : '';
-    const { userAgent: ua } = navigator;
-    const isIOS = ua.includes('iPhone');
-    // const isProtectedPath = matchProtectedRoutes(normalizedPath.split('/'));
 
     return (
       <div className="App">
-        {/* {(!isLoggedIn && !ifFetchingThreeBox && !isProtectedPath) // show landing nav when user is not logged in, 3box is not fetching, and when route is not a protected route
-          ? (
-            <NavLanding
-              handleSignInUp={this.handleSignInUp}
-              onPublicProfilePage={onPublicProfilePage}
-              landing={landing}
-              pathname={normalizedPath}
-            />
-          ) :
-        } */}
-        {/* <AppModals
-          showDownloadBanner={showDownloadBanner}
-          ifFetchingThreeBox={ifFetchingThreeBox}
-          onSyncFinished={onSyncFinished}
-          isSyncing={isSyncing}
-          hasSignedOut={hasSignedOut}
-          allowAccessModal={allowAccessModal}
-          directLogin={directLogin}
-          alertRequireMetaMask={alertRequireMetaMask}
-          accessDeniedModal={accessDeniedModal}
-          signInToWalletModal={signInToWalletModal}
-          signInModal={signInModal}
-          isIOS={isIOS}
-          mobileWalletRequiredModal={mobileWalletRequiredModal}
-          errorMessage={errorMessage}
-          mustConsentError={mustConsentError}
-          showErrorModal={showErrorModal}
-          prevNetwork={prevNetwork}
-          currentNetwork={currentNetwork}
-          showDifferentNetworkModal={showDifferentNetworkModal}
-          loggedOutModal={loggedOutModal}
-          switchedAddressModal={switchedAddressModal}
-          prevAddress={prevAddress}
-          onBoardingModal={onBoardingModal}
-          onBoardingModalTwo={onBoardingModalTwo}
-          provideConsent={provideConsent}
-          handleRequireWalletLoginModal={this.props.handleRequireWalletLoginModal}
-          handleSignInModal={this.props.handleSignInModal}
-          handleMobileWalletModal={this.props.handleMobileWalletModal}
-          handleConsentModal={this.props.handleConsentModal}
-          handleDeniedAccessModal={this.props.handleDeniedAccessModal}
-          closeErrorModal={this.props.closeErrorModal}
-          handleSwitchedNetworkModal={this.props.handleSwitchedNetworkModal}
-          handleDownloadMetaMaskBanner={this.props.handleDownloadMetaMaskBanner}
-          handleLoggedOutModal={this.props.handleLoggedOutModal}
-          handleSignOut={this.props.handleSignOut}
-          handleSwitchedAddressModal={this.props.handleSwitchedAddressModal}
-          handleOnboardingModal={this.props.handleOnboardingModal}
-          handleAccessModal={this.props.handleAccessModal}
-          handleNextMobileModal={this.handleNextMobileModal}
-          closeRequireMetaMaskModal={this.props.closeRequireMetaMaskModal}
-        /> */}
 
         <Nav />
 
@@ -432,7 +240,6 @@ class App extends Component {
         <Suspense fallback={<div>Loading...</div>}>
           <Footer />
         </Suspense>
-
       </div>
     );
   }

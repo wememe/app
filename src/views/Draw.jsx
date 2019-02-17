@@ -5,14 +5,18 @@ import PropTypes from 'prop-types';
 import CanvasDraw from "react-canvas-draw";
 import { SketchPicker } from 'react-color'
 
+import Kittie from '../assets/Kittie.gif'
 import { FileSizeModal } from '../components/Modals';
+import { waitForMined } from '../utils/smartContract';
 import './styles/Create.css';
+import { resolve } from 'dns';
+import { reject } from 'q';
 
 class Draw extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      disableSave: true,
+      // disableSave: true,
       showFileSizeModal: false,
       color: "#000000",
       width: 400,
@@ -21,10 +25,12 @@ class Draw extends Component {
       shareValue: 0,
       brushRadius: 10,
       lazyRadius: 12,
+      imageLoading: false,
+      numberOfShares: 100,
+      shareValue: 0,
       memeId: this.props.history.location.pathname.split('/')[2],
       imgSrc: null
     };
-
   }
 
   chooseColor = (color) => {
@@ -35,28 +41,38 @@ class Draw extends Component {
     this.saveableCanvas.undo();
   }
 
-  saveImage = () => {
+  handleSlider = (e) => {
+    const { wememeContract } = this.props;
+    const { memeId } = this.state;
+    const numberOfShares = e.target.value;
+
+    wememeContract.priceToMint.call(memeId, numberOfShares, (err, price) => {
+      const shareValue = web3.fromWei(price.toNumber(), 'ether') // eslint-disable-line no-undef
+      this.setState({ numberOfShares, shareValue });
+    })
+  }
+
+  saveImage = async () => {
     // puts layered canvases together and exports img string
     const canvasItems = document.getElementsByTagName('canvas')
     const base = canvasItems[3]
     const contextBase = base.getContext("2d");
     const layer1 = canvasItems[1]
     const layer2 = canvasItems[2]
-    console.log(contextBase)
+
     contextBase.drawImage(layer1, 0, 0);
     contextBase.drawImage(layer2, 0, 0);
-    // const image = base.toDataURL("image/png");
-    const image = base.toBlob(async (blob) => {
-      console.log(blob)
-      const formData = new FormData()
-      formData.append('inputdata', blob, 'filename')
-      const fetch = await this.saveToIpfs(formData);
-      const returnedData = await fetch.json();
-      const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
-      console.log(content)
-    });
-    // console.log(image)
-    // TODO upload to ipfs and get hash
+    return new Promise((resolve, reject) => {
+      const image = base.toBlob(async (blob) => {
+        const formData = new FormData()
+        formData.append('inputdata', blob, 'filename')
+        const fetch = await this.saveToIpfs(formData);
+        const returnedData = await fetch.json();
+        const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
+        resolve(content);
+      });
+    })
+
   }
 
   saveToIpfs = buffer => window.fetch('https://ipfs.infura.io:5001/api/v0/add', {
@@ -85,6 +101,27 @@ class Draw extends Component {
     }
   }
 
+  updateMeme = async () => {
+    const { buffer, numberOfShares, memeId } = this.state;
+    const { wememeContract, address, history } = this.props;
+
+    const content = await this.saveImage();
+
+    wememeContract.priceToMint.call(memeId, numberOfShares, (e, price) => {
+      wememeContract.meme(memeId, numberOfShares, content, {
+        from: address,
+        value: price
+      }, (e, txHash) => {
+        // push user to home page
+        this.setState({ imageLoading: true });
+        waitForMined(txHash).then(res => {
+          this.setState({ imageLoading: false })
+          history.push('/');
+        });
+      })
+    })
+  }
+
   changeBackground = (img) => {
     // this.setState({ imgSrc: img });
     const canvasItems = document.getElementsByTagName('canvas')
@@ -94,12 +131,12 @@ class Draw extends Component {
     background.crossOrigin = 'anonymous'
     background.src = img
     const that = this
-    background.onload = function(){
-      that.drawImageProp({ctx: contextBase, img: background})
+    background.onload = function () {
+      that.drawImageProp({ ctx: contextBase, img: background })
     }
   }
 
-  drawImageProp = ({ctx, img, x, y, w, h, offsetX, offsetY} = {}) => {
+  drawImageProp = ({ ctx, img, x, y, w, h, offsetX, offsetY } = {}) => {
     // Defaults
     if (typeof x !== "number") x = 0;
     if (typeof y !== "number") y = 0;
@@ -148,6 +185,17 @@ class Draw extends Component {
     ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h);
   }
 
+  componentDidMount() {
+    const { wememeContract } = this.props;
+    const { memeId, canvas } = this.state;
+
+    if (wememeContract.content) {
+      wememeContract.content.call(memeId, (e, content) => {
+        this.changeBackground(content)
+      })
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const { wememeContract } = nextProps;
     const { memeId, canvas } = this.state;
@@ -161,6 +209,7 @@ class Draw extends Component {
   }
 
   render() {
+    const { imageLoading, numberOfShares, shareValue } = this.state;
     return (
       <div className="createPage">
 
@@ -186,7 +235,7 @@ class Draw extends Component {
 
         <div className="canvas__wrapper">
 
-
+          <div className="canvas__canvas">
             <CanvasDraw
               ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
               brushColor={this.state.color}
@@ -195,34 +244,67 @@ class Draw extends Component {
               canvasWidth={this.state.canvasWidth}
               canvasHeight={this.state.canvasHeight}
             />
+          </div>
 
-
-
+          <div className="canvas__controls">
+            <button onClick={this.chooseWeight('small')}> Small </button>
+            <button onClick={this.chooseWeight('medium')}> Medium </button>
+            <button onClick={this.chooseWeight('large')}> Large </button>
+            <SketchPicker onChange={this.onColorChange} />
+            <button onClick={this.drawUndo.bind(this)}> undo </button>
+            {/* <button onClick={this.saveImage.bind(this)}> save </button> */}
+          </div>
 
         </div>
 
-        <button onClick={this.chooseWeight('small')}> Small </button>
-        <button onClick={this.chooseWeight('medium')}> Medium </button>
-        <button onClick={this.chooseWeight('large')}> Large </button>
+        <div className="canvas__wrapper">
+          {!imageLoading
+            ? (
+              <React.Fragment>
+                <div className="canvas__controls__shares">
+                  <div>
+                    <h3>Buy Shares</h3>
+                    <p>How many shares do you want to buy in this meme?</p>
+                    <p>Buy more shares to earn more when it sells</p>
+                  </div>
+                  <div>
+                    <h4>{numberOfShares}</h4>
+                    <p>Shares</p>
+                    <input
+                      type="range"
+                      min="10"
+                      max="1000000000"
+                      value={numberOfShares}
+                      onChange={(e) => this.handleSlider(e)}
+                    />
+                  </div>
+                  <div>
+                    <p>This will cost</p>
+                    <h4>{shareValue} Eth</h4>
+                  </div>
+                </div>
 
+                <div className="canvas__controls__shares">
 
+                </div>
 
-        <SketchPicker onChange={this.onColorChange} />
-
-        <button onClick={this.drawUndo.bind(this)}> undo </button>
-
-        <button onClick={this.saveImage.bind(this)}> save </button>
-
-
-        <Link to="/caption">
-          <button
-            type="submit"
-          // disabled={disableSave}
-          >
-            Save
-          </button>
-        </Link>
-
+                <div>
+                  {/* <Link to="/draw" className="canvas__save"> */}
+                  <button
+                    type="submit"
+                    className="canvas__save"
+                    // disabled={disableSave}
+                    onClick={() => this.updateMeme()}
+                  >
+                    Submit
+                    </button>
+                  {/* </Link> */}
+                </div>
+              </React.Fragment>
+            )
+            : <img src={Kittie} alt="" />
+          }
+        </div>
       </div>
     );
   }

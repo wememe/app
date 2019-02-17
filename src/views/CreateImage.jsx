@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { FileSizeModal } from '../components/Modals';
+import { waitForMined } from '../utils/smartContract';
+import Kittie from '../assets/Kittie.gif'
 import './styles/Create.css';
 
 class ProfilePublic extends Component {
@@ -14,6 +16,7 @@ class ProfilePublic extends Component {
       showFileSizeModal: false,
       numberOfShares: 100,
       shareValue: 0,
+      imageLoading: false,
     };
   }
 
@@ -51,7 +54,7 @@ class ProfilePublic extends Component {
 
   createMeme = async () => {
     const { buffer, numberOfShares } = this.state;
-    const { wememeContract, topId, address } = this.props;
+    const { wememeContract, address, history } = this.props;
 
     const fetch = await this.fetchPic(buffer);
     const returnedData = await fetch.json();
@@ -62,9 +65,13 @@ class ProfilePublic extends Component {
         wememeContract.meme(topId, numberOfShares, content, {
           from: address,
           value: price
-        }, (e, tx) => {
-          return tx;
+        }, (e, txHash) => {
           // push user to home page
+          this.setState({ imageLoading: true });
+          waitForMined(txHash).then(res => {
+            this.setState({ imageLoading: false })
+            history.push('/');
+          });
         })
       })
     })
@@ -72,7 +79,7 @@ class ProfilePublic extends Component {
   }
 
   render() {
-    const { disableSave, showFileSizeModal, numberOfShares, shareValue } = this.state;
+    const { disableSave, showFileSizeModal, numberOfShares, shareValue, imageLoading } = this.state;
 
     return (
       <div className="createPage">
@@ -130,45 +137,52 @@ class ProfilePublic extends Component {
 
           <div className="canvas__controls">
 
-            <div className="canvas__controls__shares">
-              <div>
-                <h3>Buy Shares</h3>
-                <p>How many shares do you want to buy in this meme?</p>
-                <p>Buy more shares to earn more when it sells</p>
-              </div>
-              <div>
-                <h4>{numberOfShares}</h4>
-                <p>Shares</p>
-                <input
-                  type="range"
-                  min="10"
-                  max="1000000000"
-                  value={numberOfShares}
-                  onChange={(e) => this.handleSlider(e)}
-                />
-              </div>
-              <div>
-                <p>This will cost</p>
-                <h4>{shareValue} Eth</h4>
-              </div>
-            </div>
+            {!imageLoading
+              ? (
+                <React.Fragment>
+                  <div className="canvas__controls__shares">
+                    <div>
+                      <h3>Buy Shares</h3>
+                      <p>How many shares do you want to buy in this meme?</p>
+                      <p>Buy more shares to earn more when it sells</p>
+                    </div>
+                    <div>
+                      <h4>{numberOfShares}</h4>
+                      <p>Shares</p>
+                      <input
+                        type="range"
+                        min="10"
+                        max="1000000000"
+                        value={numberOfShares}
+                        onChange={(e) => this.handleSlider(e)}
+                      />
+                    </div>
+                    <div>
+                      <p>This will cost</p>
+                      <h4>{shareValue} Eth</h4>
+                    </div>
+                  </div>
 
-            <div className="canvas__controls__shares">
+                  <div className="canvas__controls__shares">
 
-            </div>
+                  </div>
 
-            <div>
-              {/* <Link to="/draw" className="canvas__save"> */}
-              <button
-                type="submit"
-                className="canvas__save"
-                disabled={disableSave}
-                onClick={() => this.createMeme()}
-              >
-                Submit
-            </button>
-              {/* </Link> */}
-            </div>
+                  <div>
+                    {/* <Link to="/draw" className="canvas__save"> */}
+                    <button
+                      type="submit"
+                      className="canvas__save"
+                      disabled={disableSave}
+                      onClick={() => this.createMeme()}
+                    >
+                      Submit
+                    </button>
+                    {/* </Link> */}
+                  </div>
+                </React.Fragment>
+              )
+              : <img src={Kittie} alt="" />
+            }
           </div>
         </div>
 
