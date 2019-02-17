@@ -209,15 +209,15 @@ class Draw extends Component {
           && <FileSizeModal show={showFileSizeModal} closeFileSizeModal={this.closeFileSizeModal} />}
 
         <div className="create__guide">
-          <h2>Draw on your meme</h2>
-          <p>Build on top of someone else's work by drawing on it.</p>
+          <h2>Caption the meme</h2>
+          <p>Build on top of someone else's work by adding a caption.</p>
         </div>
 
         <div className="canvas__wrapper">
           <div className="canvas__canvas">
             <canvas
               id="c"
-            // className="canvas" 
+            // className="canvas"
             />
           </div>
 
