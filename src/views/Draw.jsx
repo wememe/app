@@ -24,7 +24,7 @@ class Draw extends Component {
       numberOfShares: 100,
       shareValue: 0,
       brushRadius: 10,
-      lazyRadius: 12,
+      lazyRadius: 0,
       imageLoading: false,
       numberOfShares: 100,
       shareValue: 0,
@@ -105,7 +105,7 @@ class Draw extends Component {
   updateMeme = async () => {
     const { buffer, numberOfShares, memeId } = this.state;
     const { wememeContract, address, history } = this.props;
-
+    this.setState({ imageLoading: true });
     const content = await this.saveImage();
 
     wememeContract.priceToMint.call(memeId, numberOfShares, (e, price) => {
@@ -114,7 +114,6 @@ class Draw extends Component {
         value: price
       }, (e, txHash) => {
         // push user to home page
-        this.setState({ imageLoading: true });
         waitForMined(txHash).then(res => {
           this.setState({ imageLoading: false })
           history.push('/');
@@ -270,36 +269,44 @@ class Draw extends Component {
                 </div>
               )
               : (
-                <div className="canvas__controls__shares">
-                  <div>
-                    <h3>Buy Shares</h3>
-                    <p>How many shares do you want to buy in this meme?</p>
-                    <p>Buy more shares to earn more when it sells</p>
-                  </div>
-                  <div>
-                    <h4>{numberOfShares}</h4>
-                    <p>Shares</p>
-                    <input
-                      type="range"
-                      min="100"
-                      max="1000000000"
-                      value={numberOfShares}
-                      onChange={(e) => this.handleSlider(e)}
-                    />
-                  </div>
-                  <div>
-                    <p>This will cost</p>
-                    <h4>{shareValue} Eth</h4>
-                  </div>
-                  <button
-                    type="submit"
-                    className="canvas__save"
-                    // disabled={disableSave}
-                    onClick={() => this.updateMeme()}
-                  >
-                    Submit
+                !imageLoading
+                  ? (
+                    <div className="canvas__controls__shares">
+                      <div>
+                        <h3>Buy Shares</h3>
+                        <p>How many shares do you want to buy in this meme?</p>
+                        <p>Buy more shares to earn more when it sells</p>
+                      </div>
+                      <div>
+                        <h4>{numberOfShares}</h4>
+                        <p>Shares</p>
+                        <input
+                          type="range"
+                          min="100"
+                          max="1000000000"
+                          value={numberOfShares}
+                          onChange={(e) => this.handleSlider(e)}
+                        />
+                      </div>
+                      <div>
+                        <p>This will cost</p>
+                        <h4>{shareValue} Eth</h4>
+                      </div>
+                      <button
+                        type="submit"
+                        className="canvas__save"
+                        // disabled={disableSave}
+                        onClick={() => this.updateMeme()}
+                      >
+                        Submit
                     </button>
-                </div>
+                    </div>
+                  )
+                  : (
+                    <div className="canvas__controls__shares loading">
+                      <img src={Kittie} />
+                    </div>
+                  )
               )}
           </div>
         </div>

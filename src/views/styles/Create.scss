@@ -83,6 +83,10 @@
   align-items: center;
 }
 
+.loading {
+  background-color: $weMemeYellow !important;
+}
+
 .noPadding {
   padding: 0 !important;
   width: 100%;

@@ -22,6 +22,7 @@ class Draw extends Component {
       numberOfShares: 100,
       shareValue: 0,
       imageLoading: false,
+      showShares: false,
       canvas: null,
       memeId: this.props.history.location.pathname.split('/')[2]
     };
@@ -159,6 +160,7 @@ class Draw extends Component {
   updateMeme = async () => {
     const { buffer, numberOfShares, memeId } = this.state;
     const { wememeContract, address, history } = this.props;
+    this.setState({ imageLoading: true });
 
     const content = await this.saveImage();
 
@@ -168,7 +170,6 @@ class Draw extends Component {
         value: price
       }, (e, txHash) => {
         // push user to home page
-        this.setState({ imageLoading: true });
         waitForMined(txHash).then(res => {
           this.setState({ imageLoading: false })
           getMemes();
@@ -179,7 +180,7 @@ class Draw extends Component {
   }
 
   render() {
-    const { disableSave, showFileSizeModal, numberOfShares, shareValue } = this.state;
+    const { disableSave, showFileSizeModal, numberOfShares, shareValue, showShares, imageLoading } = this.state;
 
     return (
       <div className="createPage">
@@ -215,54 +216,72 @@ class Draw extends Component {
 
           <div className="canvas__controls">
 
-            <div className="canvas__controls__shares">
-              <div>
-                <h3>Buy Shares</h3>
-                <p>How many shares do you want to buy in this meme?</p>
-                <p>Buy more shares to earn more when it sells</p>
-              </div>
-              <div>
-                <h4>{numberOfShares}</h4>
-                <p>Shares</p>
-                <input
-                  type="range"
-                  min="10"
-                  max="1000000000"
-                  value={numberOfShares}
-                  onChange={(e) => this.handleSlider(e)}
-                />
-              </div>
-              <div>
-                <p>This will cost</p>
-                <h4>{shareValue} Eth</h4>
-              </div>
-            </div>
-
-            <div className="canvas__controls__shares">
-              {/* <img src={Kittie} alt="" /> */}
-              <button id="add" type="button" onClick={this.addText.bind(this)}>add</button>
-
-              <select class="select2 font-change" data-type="fontFamily" onChange={this.fontChange.bind(this)}>
-                <option value="Arial">Arial</option>
-                <option value="Arial Black">Arial Black</option>
-                <option value="Impact">Impact</option>
-                <option value="Tahoma">Tahoma</option>
-                <option value="Times New Roman">Times New Roman</option>
-              </select>
-
-              <SketchPicker onChange={this.onColorChange} />
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="canvas__save"
-                // disabled={disableSave}
-                onClick={() => this.updateMeme()}
-              >
-                Submit
-            </button>
-            </div>
+            {!showShares
+              ? (
+                <div className="canvas__controls__shares noPadding sketchPicker">
+                  <SketchPicker onChange={this.onColorChange} />
+                  <select class="select2 font-change" data-type="fontFamily" onChange={this.fontChange.bind(this)}>
+                    <option value="Arial">Arial</option>
+                    <option value="Arial Black">Arial Black</option>
+                    <option value="Impact">Impact</option>
+                    <option value="Tahoma">Tahoma</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                  </select>
+                  <button id="add" type="button" onClick={this.addText.bind(this)}>add</button>
+                  
+                  <div>
+                    <button
+                      type="submit"
+                      className="canvas__save"
+                      // disabled={disableSave}
+                      // onClick={() => this.updateMeme()}
+                      onClick={() => this.setState({ showShares: true })}
+                    >
+                      Done
+                  </button>
+                  </div>
+                </div>
+              )
+              : (
+                !imageLoading
+                  ? (
+                    <div className="canvas__controls__shares">
+                      <div>
+                        <h3>Buy Shares</h3>
+                        <p>How many shares do you want to buy in this meme?</p>
+                        <p>Buy more shares to earn more when it sells</p>
+                      </div>
+                      <div>
+                        <h4>{numberOfShares}</h4>
+                        <p>Shares</p>
+                        <input
+                          type="range"
+                          min="10"
+                          max="1000000000"
+                          value={numberOfShares}
+                          onChange={(e) => this.handleSlider(e)}
+                        />
+                      </div>
+                      <div>
+                        <p>This will cost</p>
+                        <h4>{shareValue} Eth</h4>
+                      </div>
+                      <button
+                        type="submit"
+                        className="canvas__save"
+                        // disabled={disableSave}
+                        onClick={() => this.updateMeme()}
+                      >
+                        Submit
+                    </button>
+                    </div>
+                  )
+                  : (
+                    <div className="canvas__controls__shares loading">
+                      <img src={Kittie} />
+                    </div>
+                  )
+              )}
           </div>
         </div>
 
