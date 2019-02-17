@@ -621,7 +621,7 @@ export const startWeMeme = async () => {
     const addrs = await ethereum.enable() // eslint-disable-line no-undef
     const address = addrs[0];
     const Wememe = web3.eth.contract(abi); // eslint-disable-line no-undef
-    const wememeContract = Wememe.at('0x7B55a715AD5e82956CA6F3093D7Eb3C16C308a78')
+    const wememeContract = Wememe.at('0xF00e73041182368FB937cc6E6F93acE282dDfEc3')
     const profile = await Box.getProfile(address) // eslint-disable-line no-undef
 
     store.dispatch({
