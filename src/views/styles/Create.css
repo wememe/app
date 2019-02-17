@@ -94,7 +94,7 @@
 
 .canvas__wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 90vw;
   position: relative; }
@@ -134,15 +134,27 @@
 .canvas__buy {
   width: 100%;
   background-color: #d4d4d4;
-  height: 100%;
-  max-height: 70vh;
-  max-width: 90vw;
-  display: block;
-  object-fit: cover;
+  max-height: 500px;
+  width: auto;
   -webkit-transition: all .5s ease;
   -moz-transition: all .5s ease;
   -o-transition: all .5s ease;
   transition: all .5s ease; }
+
+.creators {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center; }
+  .creators h2 {
+    margin-right: 20px; }
+
+.creators__wrapper {
+  width: 60vw;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 40px; }
 
 .upper-canvas {
   width: 100% !important;

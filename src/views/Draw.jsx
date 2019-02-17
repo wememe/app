@@ -216,20 +216,6 @@ class Draw extends Component {
           <p>Build on top of someone else's work by drawing on it.</p>
         </div>
 
-        <div className="progress__wrapper">
-          <div className="progress__steps">
-            <p>Start</p>
-            <p>Draw</p>
-            <p>Caption</p>
-          </div>
-
-          <div className="progress__bar__wrapper">
-            <div className="progress__bar" />
-            <div className="progress__bar" />
-            <div className="progress__bar grey" />
-          </div>
-        </div>
-
 
         <div className="canvas__wrapper">
 
@@ -309,9 +295,6 @@ class Draw extends Component {
                   )
               )}
           </div>
-        </div>
-
-        <div className="canvas__context">
         </div>
       </div>
     );

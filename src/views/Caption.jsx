@@ -192,19 +192,6 @@ class Draw extends Component {
           <h2>Draw on your meme</h2>
           <p>Build on top of someone else's work by drawing on it.</p>
         </div>
-        <div className="progress__wrapper">
-          <div className="progress__steps">
-            <p>Start</p>
-            <p>Draw</p>
-            <p>Caption</p>
-          </div>
-
-          <div className="progress__bar__wrapper">
-            <div className="progress__bar" />
-            <div className="progress__bar" />
-            <div className="progress__bar" />
-          </div>
-        </div>
 
         <div className="canvas__wrapper">
           <div className="canvas__canvas">
@@ -228,7 +215,7 @@ class Draw extends Component {
                     <option value="Times New Roman">Times New Roman</option>
                   </select>
                   <button id="add" type="button" onClick={this.addText.bind(this)}>add</button>
-                  
+
                   <div>
                     <button
                       type="submit"
@@ -283,9 +270,6 @@ class Draw extends Component {
                   )
               )}
           </div>
-        </div>
-
-        <div className="meme__metaData">
         </div>
       </div>
     );

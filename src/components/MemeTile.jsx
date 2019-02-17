@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Meme from '../assets/ethereum-meme.jpg'
-
 const MemeTile = ({ meme }) => (
   <Link to={`/${meme.step}/${meme.id}`}>
     <div className="meme__tile">
@@ -13,7 +11,9 @@ const MemeTile = ({ meme }) => (
         <h3>#{meme.id}</h3>
         <p>{meme.staked} Wei</p>
         <button type="button">
-          {meme.step}
+          {meme.step !== 'gallery'
+            ? meme.step
+            : 'view'}
         </button>
       </div>
     </div>

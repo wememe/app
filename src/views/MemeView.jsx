@@ -25,17 +25,17 @@ class Buy extends Component {
       numberOfShares: 100,
       shareValue: 0,
       memeURL: '',
-      price: 0,
       creator1: '',
       creator2: '',
       creator3: '',
+      owner: '',
       memeId: this.props.history.location.pathname.split('/')[2],
     };
   }
 
   componentDidMount() {
     const { wememeContract } = this.props;
-    const { memeId, canvas } = this.state;
+    const { memeId } = this.state;
 
     if (wememeContract.content) {
       wememeContract.content.call(memeId, (e, content) => {
@@ -43,12 +43,15 @@ class Buy extends Component {
         wememeContract.creators.call(memeId, 0, (e, creator1) => {
           wememeContract.creators.call(memeId, 1, (e, creator2) => {
             wememeContract.creators.call(memeId, 2, (e, creator3) => {
-              this.setState({
-                creator1,
-                creator2,
-                creator3,
-              })
-              window.renderProfileHovers()
+              wememeContract.ownerOf.call(memeId, (e, owner) => {
+                this.setState({
+                  creator1,
+                  creator2,
+                  creator3,
+                  owner,
+                })
+                window.renderProfileHovers()
+              });
             });
           });
         });
@@ -58,13 +61,25 @@ class Buy extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { wememeContract } = nextProps;
-    const { memeId, canvas } = this.state;
+    const { memeId } = this.state;
 
     if (wememeContract.content) {
       wememeContract.content.call(memeId, (e, content) => {
         this.setState({ memeURL: content });
-        wememeContract.poolBalance.call(memeId, (e, price) => {
-          this.setState({ price: web3.fromWei(price, 'ether').toNumber() }) // eslint-disable-line no-undef
+        wememeContract.creators.call(memeId, 0, (e, creator1) => {
+          wememeContract.creators.call(memeId, 1, (e, creator2) => {
+            wememeContract.creators.call(memeId, 2, (e, creator3) => {
+              wememeContract.ownerOf.call(memeId, (e, owner) => {
+                this.setState({
+                  creator1,
+                  creator2,
+                  creator3,
+                  owner,
+                })
+                window.renderProfileHovers()
+              });
+            });
+          });
         });
       })
     }
@@ -73,36 +88,36 @@ class Buy extends Component {
   render() {
     const {
       memeURL,
-      price,
       creator1,
       creator2,
       creator3,
+      owner,
     } = this.state;
 
     return (
       <div className="createPage">
 
-        <div className="create__guide">
-          <h2>Buy this meme</h2>
-          <p>Build on top of someone else's work by drawing on it.</p>
-        </div>
-
-        <div>
-          <h1>{price} Eth</h1>
-        </div>
-
         <div className="canvas__wrapper">
           <img src={memeURL} alt="" className="canvas__buy" />
         </div>
 
-        {creator1 ? (
-          <React.Fragment>
-            <threebox-address data-address={creator1}></threebox-address>
-            <threebox-address data-address={creator2}></threebox-address>
-            <threebox-address data-address={creator3}></threebox-address>
-          </React.Fragment>
-        ) : ''
-        }
+        <div className="creators__wrapper">
+          {owner && (
+            <div className="creators">
+              <h2>Owned by</h2>
+              <threebox-address data-address={owner}></threebox-address>
+            </div>
+          )}
+
+          {creator1 && (
+            <div className="creators">
+              <h2>Created by</h2>
+              <threebox-address data-address={creator1}></threebox-address>
+              <threebox-address data-address={creator2}></threebox-address>
+              <threebox-address data-address={creator3}></threebox-address>
+            </div>
+          )}
+        </div>
 
       </div >
     );
