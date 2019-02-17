@@ -192,7 +192,13 @@ class Draw extends Component {
 
     if (wememeContract.content) {
       wememeContract.content.call(memeId, (e, content) => {
-        this.changeBackground(content)
+        this.changeBackground(content);
+        wememeContract.creators.call(memeId, 0, (e, creator1) => {
+          this.setState({
+            creator1,
+          })
+          window.renderProfileHovers()
+        });
       })
     }
   }
@@ -203,11 +209,17 @@ class Draw extends Component {
 
     wememeContract.content.call(memeId, (e, content) => {
       this.changeBackground(content)
+      wememeContract.creators.call(memeId, 0, (e, creator1) => {
+        this.setState({
+          creator1,
+        })
+        window.renderProfileHovers()
+      });
     })
   }
 
   render() {
-    const { imageLoading, numberOfShares, shareValue, showShares } = this.state;
+    const { imageLoading, numberOfShares, shareValue, showShares, creator1 } = this.state;
     return (
       <div className="createPage">
 
@@ -235,7 +247,7 @@ class Draw extends Component {
               ? (
                 <div className="canvas__controls__shares noPadding sketchPicker">
                   <div className="canvas__controls__shares__wrapper">
-                    <SketchPicker onChangeComplete={this.onColorChange}  color={ this.state.color } />
+                    <SketchPicker onChangeComplete={this.onColorChange} color={this.state.color} />
                     <div className="canvas__controls__shares__brushSize">
                       <button onClick={this.chooseWeight('small')}> Small </button>
                       <button onClick={this.chooseWeight('medium')}> Medium </button>
@@ -295,7 +307,16 @@ class Draw extends Component {
                   )
               )}
           </div>
+
         </div>
+
+        {creator1 && (
+          <div className="creators">
+            <h2>Created by</h2>
+            <threebox-address data-address={creator1}></threebox-address>
+          </div>
+        )}
+        
       </div>
     );
   }

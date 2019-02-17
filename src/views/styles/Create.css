@@ -68,7 +68,7 @@
   align-items: center; }
 
 .loading {
-  background-color: #FFD900 !important; }
+  background-color: #51b1ff !important; }
 
 .noPadding {
   padding: 0 !important;
@@ -97,7 +97,8 @@
   justify-content: center;
   align-items: center;
   width: 90vw;
-  position: relative; }
+  position: relative;
+  margin-bottom: 70px; }
 
 .canvas__context {
   display: flex;

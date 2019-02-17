@@ -165,7 +165,10 @@ class ProfilePublic extends Component {
                   </div>
                 </React.Fragment>
               )
-              : <img src={Kittie} alt="" />
+              : (
+                <div className="canvas__controls__shares loading">
+                  <img src={Kittie} />
+                </div>)
             }
           </div>
         </div>

@@ -6,7 +6,10 @@ nav {
   display: flex;
   align-items: center;
   z-index: 3;
-  background-color: #A736FF; }
+  background-color: #A736FF;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; }
   nav button {
     display: inline-block; }
   nav p {
@@ -14,6 +17,13 @@ nav {
 
 .hideNav {
   display: none !important; }
+
+.nav__dropdown__links {
+  display: flex;
+  justify-self: auto;
+  margin-right: 3vw; }
+  .nav__dropdown__links li {
+    margin-left: 20px; }
 
 .bannerMargin {
   margin-top: 54px; }
@@ -52,10 +62,11 @@ nav {
   margin-right: 12px; }
 
 #nav__logo--marginLeft {
-  margin-left: 3vw;
+  left: 3vw;
   display: flex;
   justify-content: flex-start;
-  align-items: center; }
+  align-items: center;
+  position: absolute; }
   #nav__logo--marginLeft a {
     display: flex;
     justify-content: flex-start;

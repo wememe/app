@@ -53,6 +53,16 @@ class Draw extends Component {
             crossOrigin: 'anonymous'
           });
         });
+
+        wememeContract.creators.call(memeId, 0, (e, creator1) => {
+          wememeContract.creators.call(memeId, 1, (e, creator2) => {
+            this.setState({
+              creator1,
+              creator2,
+            })
+            window.renderProfileHovers()
+          });
+        });
       })
     }
   }
@@ -70,6 +80,16 @@ class Draw extends Component {
             scaleX: canvas.width / img.width,
             scaleY: canvas.height / img.height,
             crossOrigin: 'anonymous'
+          });
+        });
+
+        wememeContract.creators.call(memeId, 0, (e, creator1) => {
+          wememeContract.creators.call(memeId, 1, (e, creator2) => {
+            this.setState({
+              creator1,
+              creator2,
+            })
+            window.renderProfileHovers()
           });
         });
       })
@@ -180,7 +200,7 @@ class Draw extends Component {
   }
 
   render() {
-    const { disableSave, showFileSizeModal, numberOfShares, shareValue, showShares, imageLoading } = this.state;
+    const { disableSave, showFileSizeModal, numberOfShares, shareValue, showShares, imageLoading, creator1, creator2 } = this.state;
 
     return (
       <div className="createPage">
@@ -271,6 +291,13 @@ class Draw extends Component {
               )}
           </div>
         </div>
+        {creator1 && (
+          <div className="creators">
+            <h2>Created by</h2>
+            <threebox-address data-address={creator1}></threebox-address>
+            <threebox-address data-address={creator2}></threebox-address>
+          </div>
+        )}
       </div>
     );
   }

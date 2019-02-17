@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import CanvasDraw from "react-canvas-draw";
 import { SketchPicker } from 'react-color'
 
-import Kittie from '../assets/Kittie.gif'
+import Kittie from '../assets/Kittie.gif';
 import { waitForMined, getMemes } from '../utils/smartContract';
 import './styles/Create.css';
 

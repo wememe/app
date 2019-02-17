@@ -20,14 +20,8 @@ class Landing extends Component {
     };
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
     const { forDraw, forCaption } = this.props;
-    console.log('forDraw', forDraw)
-    console.log('forCaption', forCaption)
 
     return (
       <div className="landing">
@@ -37,15 +31,11 @@ class Landing extends Component {
           <img src={CircleBlue} alt="" className="shapes CircleBlue" />
           <img src={TriangleGreen} alt="" className="shapes TriangleGreen" />
 
-          <img src={Meme} alt="" />
           <div className="landing__hero__copy">
             <h1 className="landing__hero__copy__tagline">WeMeme</h1>
             <p className="landing__hero__copy__text">
               Create memes together and earn when they sell.
       </p>
-            {/* <p className="landing__hero__copy__text">
-      Create and trade memes together.
-      </p> */}
             <p>
               1. Upload an image
       </p>
@@ -53,7 +43,7 @@ class Landing extends Component {
               2. Someone else draws on the image and buys shares
       </p>
             <p>
-              1. Someone else captions the image
+              3. Someone else captions the image
       </p>
             <div className="landing__hero__copy__buttons">
               <Link to="/create">

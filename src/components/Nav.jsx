@@ -42,75 +42,32 @@ class Nav extends Component {
     const networkColor = this.props.currentNetwork;
 
     return (
-      <nav className={`${showDownloadBanner ? 'bannerMargin' : ''}`}>
+      <nav>
         <div id="nav__logo--marginLeft">
           <Link to="/">
-            {/* <h2 className="landing__nav__logo">WeMeme</h2> */}
-            <img src={Wememe} alt="" className="landing__nav__logo"/>
-          </Link>
-          <Link to="/gallery">
-            <p>Gallery</p>
+            <img src={Wememe} alt="" className="landing__nav__logo" />
           </Link>
         </div>
 
-        {/* {
-          image.length > 0 && image[0].contentUrl ?
-            <img src={`https://ipfs.infura.io/ipfs/${image[0].contentUrl['/']}`} className="nav__userPicture clearProfPic" alt="profile" onClick={this.handleDropdown} role="button" />
-            : <div className="nav__userPicture" onClick={this.handleDropdown} />
-        } */}
-
-        <p
-          className="nav__userPicture"
-          onClick={this.handleDropdown} >
-          Create &#x25bc;
-        </p>
-
-        {/* desktop nav dropdown */}
-        {/* <div className={`${showProfileModal ? 'nav__dropdown--visible' : undefined} nav__dropdown nav__dropdown--desktop`}
-          onClick={this.handleDropdown}>
-          <ul>
-            <Link to={`/${currentAddress}/${routes.ACTIVITY}`}>
-              <li className="nav__dropdown__wrapper">
-                <img src={Profile} className="nav__dropdown__icon" alt="profile" role="button" />
-                Profile
-              </li>
-            </Link>
-            <Link to={`/${currentAddress}/${routes.EDIT}`}>
-              <li className="nav__dropdown__wrapper">
-                <img src={Edit} className="nav__dropdown__icon" alt="profile" role="button" />
-                Edit profile
-              </li>
-            </Link>
-            <div className="nav__divide" />
-            <li onClick={() => this.handleSignOut()} className="nav__dropdown__wrapper">
-              <img src={SignOut} className="nav__dropdown__icon" alt="profile" role="button" />
-              Sign Out
+        <div className="nav__dropdown__links">
+          <Link to="/create">
+            <li className="nav__dropdown__wrapper">
+              Upload
             </li>
-          </ul>
-        </div> */}
-
-        <div className={`${showProfileModal ? 'nav__dropdown--visible' : undefined} nav__dropdown nav__dropdown--desktop`}
-          onClick={this.handleDropdown}>
-          <ul>
-            <Link to="/create">
-              <li className="nav__dropdown__wrapper">
-                <img src={Add} className="nav__dropdown__icon" alt="profile" role="button" />
-                Create
+          </Link>
+          <Link to="/draw">
+            <li className="nav__dropdown__wrapper">
+              Draw
               </li>
-            </Link>
-            <Link to="/draw">
-              <li className="nav__dropdown__wrapper">
-                <img src={Pencil} className="nav__dropdown__icon" alt="profile" role="button" />
-                Draw
+          </Link>
+          <Link to="/caption">
+            <li className="nav__dropdown__wrapper">
+              Caption
               </li>
-            </Link>
-            <Link to="/caption">
-              <li className="nav__dropdown__wrapper">
-                <img src={Pencil} className="nav__dropdown__icon" alt="profile" role="button" />
-                Caption
-              </li>
-            </Link>
-          </ul>
+          </Link>
+          <Link to="/gallery">
+            <li>Sold</li>
+          </Link>
         </div>
 
         {showProfileModal &&

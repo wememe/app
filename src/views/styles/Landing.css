@@ -53,21 +53,21 @@
 
 .SquareYellow {
   position: absolute;
-  top: 2vh;
+  top: 5vh;
   left: 17vw;
-  width: 55px; }
+  width: 72px; }
 
 .CircleBlue {
   position: absolute;
   top: 11vh;
   left: 86vw;
-  width: 50px; }
+  width: 90px; }
 
 .TriangleGreen {
   position: absolute;
   top: 58vh;
   left: 61vw;
-  width: 40px; }
+  width: 74px; }
 
 .landing__hero__copy__profilecard--mobile {
   display: none; }

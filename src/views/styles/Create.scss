@@ -84,7 +84,7 @@
 }
 
 .loading {
-  background-color: $weMemeYellow !important;
+  background-color: #51b1ff !important;
 }
 
 .noPadding {
@@ -119,7 +119,7 @@
   align-items: center;
   width: 90vw;
   position: relative;
-
+  margin-bottom: 70px;
 }
 
 .canvas__context {
@@ -174,7 +174,6 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
   h2 {
     margin-right: 20px;
   }

@@ -9,6 +9,9 @@ nav {
   align-items: center;
   z-index: 3;
   background-color: #A736FF;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 
   button {
     display: inline-block;
@@ -21,6 +24,16 @@ nav {
 
 .hideNav {
   display: none !important;
+}
+
+.nav__dropdown__links {
+  display: flex;
+  justify-self: auto;
+  margin-right: 3vw;
+  
+  li {
+    margin-left: 20px;
+  }
 }
 
 .bannerMargin {
@@ -70,10 +83,11 @@ nav {
 }
 
 #nav__logo--marginLeft {
-  margin-left: 3vw;
+  left: 3vw;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  position: absolute;
 
   a {
     display: flex;
