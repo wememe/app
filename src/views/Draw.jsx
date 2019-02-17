@@ -19,8 +19,8 @@ class Draw extends Component {
       // disableSave: true,
       showFileSizeModal: false,
       color: "#000000",
-      width: 400,
-      height: 400,
+      canvasWidth: 800,
+      canvasHeight: 500,
       numberOfShares: 100,
       shareValue: 0,
       brushRadius: 10,
@@ -89,7 +89,7 @@ class Draw extends Component {
   chooseWeight = (weight) => () => {
     console.log(weight)
     if (weight === 'small') {
-      this.setState({ brushRadius: 5 })
+      this.setState({ brushRadius: 4 })
       return
     }
     if (weight === 'medium') {
@@ -97,7 +97,7 @@ class Draw extends Component {
       return
     }
     if (weight === 'large') {
-      this.setState({ brushRadius: 15 })
+      this.setState({ brushRadius: 17 })
       return
     }
   }
