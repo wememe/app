@@ -34,6 +34,23 @@ class Draw extends Component {
     canvas.uniScaleTransform = true;
     // console.log(canvas)
     this.setState({ canvas });
+
+    const imageUrl = "https://ipfs.infura.io/ipfs/Qmci55ieQdt8qZv5B9KuTotnsuqSUKMdmMPmjsS2x5U1pB"
+    canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
+    // backgroundImageOpacity: 0.5,
+    // should the image be resized to fit the container?
+    // TODO not working....??
+    backgroundImageStreftch: true,
+    opacity: 0.5,
+    width: canvas.width,
+    height: canvas.height,
+    // angle: 45,
+    // left: 400,
+    // top: 400,
+    originX: 'left',
+    originY: 'top',
+    crossOrigin: 'anonymous'
+  });
   }
 
   addText = () => {
@@ -69,6 +86,22 @@ class Draw extends Component {
       obj.setText(value);
       this.state.canvas.renderAll();
     }
+  }
+
+  saveImage = () => {
+    // puts layered canvases together and exports img string
+    // const canvasItems = document.getElementsByTagName('canvas')
+    // const base = canvasItems[3]
+    // const contextBase = base.getContext("2d");
+    // const layer1 = canvasItems[2]
+    // const layer2 = canvasItems[2]
+    // contextBase.drawImage(layer1, 0, 0);
+    // contextBase.drawImage(layer2, 0, 0);
+    // const image = base.toDataURL("image/png");
+    // console.log(image)
+    // TODO upload to ipfs and get hash
+    const image = this.state.canvas.toDataURL("image/png");
+    console.log(image)
   }
 
   addLayer = () => {
@@ -129,6 +162,8 @@ class Draw extends Component {
 </select>
 
   <SketchPicker onChange={this.onColorChange}/>
+
+  <button onClick={this.saveImage.bind(this)}> save </button>
 
         <Link to="/sell">
           <button
