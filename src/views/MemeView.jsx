@@ -48,6 +48,7 @@ class Buy extends Component {
                 creator2,
                 creator3,
               })
+              window.renderProfileHovers()
             });
           });
         });
@@ -94,12 +95,14 @@ class Buy extends Component {
           <img src={memeURL} alt="" className="canvas__buy" />
         </div>
 
-        <div>{creator1}</div>
-        <div>{creator2}</div>
-        <div>{creator3}</div>
-        {/* <threebox-address data-address={creator1}></threebox-address> */}
-        {/* <threebox-address data-address={creator2}></threebox-address> */}
-        {/* <threebox-address data-address={creator3}></threebox-address> */}
+        {creator1 ? (
+          <React.Fragment>
+            <threebox-address data-address={creator1}></threebox-address>
+            <threebox-address data-address={creator2}></threebox-address>
+            <threebox-address data-address={creator3}></threebox-address>
+          </React.Fragment>
+        ) : ''
+        }
 
       </div >
     );
