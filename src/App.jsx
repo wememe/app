@@ -21,6 +21,7 @@ import Terms from './views/Terms';
 import Create from './views/Create';
 import Buy from './views/Buy';
 import BuyView from './views/BuyView';
+import MemeView from './views/MemeView';
 import Gallery from './views/Gallery';
 import CaptionGallery from './views/CaptionGallery';
 import DrawGallery from './views/DrawGallery';
@@ -122,6 +123,12 @@ class App extends Component {
             exact
             path="/gallery"
             component={Gallery}
+          />
+
+          <Route
+            exact
+            path="/gallery/:memeId"
+            component={MemeView}
           />
 
           <Route
