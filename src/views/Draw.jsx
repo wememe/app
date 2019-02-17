@@ -18,9 +18,9 @@ class Draw extends Component {
     this.state = {
       // disableSave: true,
       showFileSizeModal: false,
-      color: "#000000",
-      width: 400,
-      height: 400,
+      colorPicker: "#000000",
+      canvasWidth: 800,
+      canvasHeight: 500,
       numberOfShares: 100,
       shareValue: 0,
       brushRadius: 10,
@@ -83,13 +83,13 @@ class Draw extends Component {
   });
 
   onColorChange = (obj) => {
-    this.setState({ color: obj.hex })
+    this.setState({ colorPicker: obj.hex, color: obj.hex })
   }
 
   chooseWeight = (weight) => () => {
     console.log(weight)
     if (weight === 'small') {
-      this.setState({ brushRadius: 5 })
+      this.setState({ brushRadius: 4 })
       return
     }
     if (weight === 'medium') {
@@ -97,7 +97,7 @@ class Draw extends Component {
       return
     }
     if (weight === 'large') {
-      this.setState({ brushRadius: 15 })
+      this.setState({ brushRadius: 17 })
       return
     }
   }
@@ -222,7 +222,7 @@ class Draw extends Component {
           <div className="canvas__canvas">
             <CanvasDraw
               ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
-              brushColor={this.state.color}
+              brushColor={this.state.colorPicker}
               brushRadius={this.state.brushRadius}
               lazyRadius={this.state.lazyRadius}
               canvasWidth={this.state.canvasWidth}
@@ -235,7 +235,7 @@ class Draw extends Component {
               ? (
                 <div className="canvas__controls__shares noPadding sketchPicker">
                   <div className="canvas__controls__shares__wrapper">
-                    <SketchPicker onChange={this.onColorChange} />
+                    <SketchPicker onChangeComplete={this.onColorChange}  color={ this.state.color } />
                     <div className="canvas__controls__shares__brushSize">
                       <button onClick={this.chooseWeight('small')}> Small </button>
                       <button onClick={this.chooseWeight('medium')}> Medium </button>
