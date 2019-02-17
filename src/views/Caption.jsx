@@ -44,25 +44,15 @@ class Draw extends Component {
 
     wememeContract.content.call(memeId, (e, content) => {
       imageUrl = content;
-      // const imageUrl = "https://ipfs.infura.io/ipfs/Qmci55ieQdt8qZv5B9KuTotnsuqSUKMdmMPmjsS2x5U1pB"
-      canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
-        // backgroundImageOpacity: 0.5,
-        // should the image be resized to fit the container?
-        // TODO not working....??
-        backgroundImageStreftch: true,
-        opacity: 0.5,
-        width: canvas.width,
-        height: canvas.height,
-        // angle: 45,
-        // left: 400,
-        // top: 400,
-        originX: 'left',
-        originY: 'top',
-        crossOrigin: 'anonymous'
-      });
+      fabric.Image.fromURL(content, function(img) {
+        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+           scaleX: canvas.width / img.width,
+           scaleY: canvas.height / img.height,
+           crossOrigin: 'anonymous'
+        });
+     });
     })
   }
-
 
   addText = () => {
     var newID = (new Date()).getTime().toString().substr(5);
