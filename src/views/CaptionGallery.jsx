@@ -16,6 +16,8 @@ class CaptionGallery extends Component {
   }
 
   render() {
+    const { forCaption } = this.props;
+
     return (
       <div className="buyPage">
 
@@ -25,13 +27,9 @@ class CaptionGallery extends Component {
         </div>
 
         <div className="buy__grid">
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
+          {forCaption.map((meme, i) => (
+            <MemeTile key={i} meme={meme} />
+          ))}
         </div>
 
       </div>
@@ -48,6 +46,7 @@ CaptionGallery.propTypes = {
   isLoadingPublicProfile: PropTypes.bool,
   showSignInBanner: PropTypes.bool,
   currentAddress: PropTypes.string,
+  forCaption: PropTypes.array,
 };
 
 CaptionGallery.defaultProps = {
@@ -56,10 +55,11 @@ CaptionGallery.defaultProps = {
   isLoadingPublicProfile: true,
   showSignInBanner: false,
   currentAddress: '',
+  forCaption: [],
 };
 
 const mapState = state => ({
-  // currentAddress: state.threeBox.currentAddress,
+  forCaption: state.threeBox.forCaption,
 });
 
 export default withRouter(connect(mapState,

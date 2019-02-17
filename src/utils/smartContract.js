@@ -718,6 +718,7 @@ export const getMemes = () => {
           forCaption,
           forSale,
           forGallery,
+          topId,
         })
       }
     }
@@ -734,7 +735,7 @@ export const getMemes = () => {
                 id: i,
                 content,
                 staked: staked.toNumber(),
-                step: 'Draw',
+                step: 'draw',
               })
               checkEndAndUpdateState();
             } else if (num.toNumber() === 2) {
@@ -743,7 +744,7 @@ export const getMemes = () => {
                 id: i,
                 content,
                 staked: staked.toNumber(),
-                step: 'Caption',
+                step: 'caption',
               })
               checkEndAndUpdateState();
             } else {
@@ -754,7 +755,7 @@ export const getMemes = () => {
                     id: i,
                     content,
                     owner,
-                    step: 'View',
+                    step: 'gallery',
                   })
                 })
                 checkEndAndUpdateState();
@@ -764,7 +765,7 @@ export const getMemes = () => {
                   id: i,
                   content,
                   price: staked.toNumber(),
-                  step: 'Buy',
+                  step: 'buy',
                 })
                 checkEndAndUpdateState();
               }

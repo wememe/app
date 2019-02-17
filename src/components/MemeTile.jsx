@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Meme from '../assets/ethereum-meme.jpg'
 
 const MemeTile = ({ meme }) => (
-  <Link to={`/caption/${meme.id}`}>
+  <Link to={`/${meme.step}/${meme.id}`}>
     <div className="meme__tile">
       <div className="meme__tile__image--wrapper">
         <img src={meme.content} alt="" className="meme__tile__image" />

@@ -16,6 +16,7 @@ class DrawGallery extends Component {
   }
 
   render() {
+    const { forDraw } = this.props;
     return (
       <div className="buyPage">
 
@@ -25,13 +26,9 @@ class DrawGallery extends Component {
         </div>
 
         <div className="buy__grid">
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
-          <MemeTile />
+          {forDraw.map((meme, i) => (
+            <MemeTile key={i} meme={meme} />
+          ))}
         </div>
 
       </div>
@@ -48,6 +45,7 @@ DrawGallery.propTypes = {
   isLoadingPublicProfile: PropTypes.bool,
   showSignInBanner: PropTypes.bool,
   currentAddress: PropTypes.string,
+  forDraw: PropTypes.array,
 };
 
 DrawGallery.defaultProps = {
@@ -56,10 +54,11 @@ DrawGallery.defaultProps = {
   isLoadingPublicProfile: true,
   showSignInBanner: false,
   currentAddress: '',
+  forDraw: [],
 };
 
 const mapState = state => ({
-  // currentAddress: state.threeBox.currentAddress,
+  forDraw: state.threeBox.forDraw,
 });
 
 export default withRouter(connect(mapState,
