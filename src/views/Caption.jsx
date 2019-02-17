@@ -89,18 +89,22 @@ class Draw extends Component {
     }
   }
 
-  saveImage = () => {
+  saveImage = async () => {
     // const image = this.state.canvas.toDataURL("image/png");
     const canvasElement = document.getElementById('c')
-    const image = canvasElement.toBlob(async (blob) => {
-      console.log(blob)
-      const formData = new FormData()
-      formData.append('inputdata', blob, 'filename')
-      const fetch = await this.saveToIpfs(formData);
-      const returnedData = await fetch.json();
-      const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
-      console.log(content)
-    });
+    return new Promise((resolve, reject) => {
+      const image = canvasElement.toBlob(async (blob) => {
+        console.log(blob)
+        const formData = new FormData()
+        formData.append('inputdata', blob, 'filename')
+        const fetch = await this.saveToIpfs(formData);
+        const returnedData = await fetch.json();
+        const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
+        console.log(content)
+        resolve(content)
+      });
+    })
+
     // console.log(image)
   }
 
