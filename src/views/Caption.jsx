@@ -45,7 +45,7 @@ class Draw extends Component {
     wememeContract.content.call(memeId, (e, content) => {
       imageUrl = content;
       fabric.Image.fromURL(content, function(img) {
-        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+        canvas.setBackgroundImage(content, canvas.renderAll.bind(canvas), {
            scaleX: canvas.width / img.width,
            scaleY: canvas.height / img.height,
            crossOrigin: 'anonymous'
@@ -90,24 +90,29 @@ class Draw extends Component {
   }
 
   saveImage = () => {
-    // puts layered canvases together and exports img string
-    // const canvasItems = document.getElementsByTagName('canvas')
-    // const base = canvasItems[3]
-    // const contextBase = base.getContext("2d");
-    // const layer1 = canvasItems[2]
-    // const layer2 = canvasItems[2]
-    // contextBase.drawImage(layer1, 0, 0);
-    // contextBase.drawImage(layer2, 0, 0);
-    // const image = base.toDataURL("image/png");
+    // const image = this.state.canvas.toDataURL("image/png");
+    const canvasElement = document.getElementById('c')
+    const image = canvasElement.toBlob(async (blob) => {
+      console.log(blob)
+      const formData = new FormData()
+      formData.append('inputdata', blob, 'filename')
+      const fetch = await this.saveToIpfs(formData);
+      const returnedData = await fetch.json();
+      const content = `https://ipfs.infura.io/ipfs/${returnedData.Hash}`;
+      console.log(content)
+    });
     // console.log(image)
-    // TODO upload to ipfs and get hash
-    const image = this.state.canvas.toDataURL("image/png");
-    console.log(image)
   }
 
   addLayer = () => {
 
   }
+
+  saveToIpfs = buffer => window.fetch('https://ipfs.infura.io:5001/api/v0/add', {
+    method: 'post',
+    'Content-Type': 'multipart/form-data',
+    body: buffer,
+  });
 
   fontChange = (e) => {
     console.log(e.target.value)
@@ -159,10 +164,10 @@ class Draw extends Component {
           <option value="Tahoma">Tahoma</option>
           <option value="Times New Roman">Times New Roman</option>
         </select>
-
+      <button onClick={this.saveImage.bind(this)}> save </button>
         <SketchPicker onChange={this.onColorChange} />
 
-        <button onClick={this.saveImage.bind(this)}> save </button>
+
 
         <div className="canvas__wrapper">
           <div className="canvas__canvas">
