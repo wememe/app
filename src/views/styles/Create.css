@@ -168,8 +168,6 @@
   object-fit: cover; }
 
 .canvas-container {
-  width: 100% !important;
-  height: 50vh !important;
   object-fit: cover; }
 
 .canvas__upload--wrapper {
