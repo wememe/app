@@ -29,7 +29,8 @@ class Draw extends Component {
       numberOfShares: 100,
       shareValue: 0,
       memeId: this.props.history.location.pathname.split('/')[2],
-      imgSrc: null
+      imgSrc: null,
+      showShares: false,
     };
   }
 
@@ -207,7 +208,7 @@ class Draw extends Component {
   }
 
   render() {
-    const { imageLoading, numberOfShares, shareValue } = this.state;
+    const { imageLoading, numberOfShares, shareValue, showShares } = this.state;
     return (
       <div className="createPage">
 
@@ -245,20 +246,30 @@ class Draw extends Component {
           </div>
 
           <div className="canvas__controls">
-            <button onClick={this.chooseWeight('small')}> Small </button>
-            <button onClick={this.chooseWeight('medium')}> Medium </button>
-            <button onClick={this.chooseWeight('large')}> Large </button>
-            <SketchPicker onChange={this.onColorChange} />
-            <button onClick={this.drawUndo.bind(this)}> undo </button>
-            {/* <button onClick={this.saveImage.bind(this)}> save </button> */}
-          </div>
+            {!showShares
+              ? (
+                <div className="canvas__controls__shares noPadding sketchPicker">
+                  <div className="canvas__controls__shares__wrapper">
+                    <SketchPicker onChange={this.onColorChange} />
+                    <div className="canvas__controls__shares__brushSize">
+                      <button onClick={this.chooseWeight('small')}> Small </button>
+                      <button onClick={this.chooseWeight('medium')}> Medium </button>
+                      <button onClick={this.chooseWeight('large')}> Large </button>
+                    </div>
+                  </div>
+                  <button onClick={this.drawUndo.bind(this)}> undo </button>
 
-        </div>
-
-        <div className="canvas__wrapper">
-          {!imageLoading
-            ? (
-              <React.Fragment>
+                  <button
+                    type="submit"
+                    className="canvas__save"
+                    // disabled={disableSave}
+                    onClick={() => this.setState({ showShares: true })}
+                  >
+                    Done
+                  </button>
+                </div>
+              )
+              : (
                 <div className="canvas__controls__shares">
                   <div>
                     <h3>Buy Shares</h3>
@@ -270,7 +281,7 @@ class Draw extends Component {
                     <p>Shares</p>
                     <input
                       type="range"
-                      min="10"
+                      min="100"
                       max="1000000000"
                       value={numberOfShares}
                       onChange={(e) => this.handleSlider(e)}
@@ -280,14 +291,6 @@ class Draw extends Component {
                     <p>This will cost</p>
                     <h4>{shareValue} Eth</h4>
                   </div>
-                </div>
-
-                <div className="canvas__controls__shares">
-
-                </div>
-
-                <div>
-                  {/* <Link to="/draw" className="canvas__save"> */}
                   <button
                     type="submit"
                     className="canvas__save"
@@ -296,12 +299,12 @@ class Draw extends Component {
                   >
                     Submit
                     </button>
-                  {/* </Link> */}
                 </div>
-              </React.Fragment>
-            )
-            : <img src={Kittie} alt="" />
-          }
+              )}
+          </div>
+        </div>
+
+        <div className="canvas__context">
         </div>
       </div>
     );

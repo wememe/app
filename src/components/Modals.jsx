@@ -25,6 +25,46 @@ import Loading from '../assets/Loading.svg';
 import LoadingWhite from '../assets/LoadingWhite.svg';
 import './styles/Modal.css';
 
+export const ShareModal = ({
+  shareValue,
+  handleSlider,
+  numberOfShares,
+}) => (
+    <div className="canvas__controls__shares">
+      <div>
+        <h3>Buy Shares</h3>
+        <p>How many shares do you want to buy in this meme?</p>
+        <p>Buy more shares to earn more when it sells</p>
+      </div>
+      <div>
+        <h4>{numberOfShares}</h4>
+        <p>Shares</p>
+        <input
+          type="range"
+          min="10"
+          max="1000000000"
+          value={numberOfShares}
+          onChange={(e) => handleSlider(e)}
+        />
+      </div>
+      <div>
+        <p>This will cost</p>
+        <h4>{shareValue} Eth</h4>
+      </div>
+    </div>
+  );
+
+ShareModal.propTypes = {
+  prevNetwork: PropTypes.string,
+  currentNetwork: PropTypes.string.isRequired,
+  handleSwitchedNetworkModal: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
+};
+
+ShareModal.defaultProps = {
+  prevNetwork: '',
+};
+
 export const SwitchedNetworksModal = ({
   prevNetwork,
   currentNetwork,
@@ -59,6 +99,7 @@ export const SwitchedNetworksModal = ({
       <div className="modal__overlay" />
     </div>
   );
+
 
 SwitchedNetworksModal.propTypes = {
   prevNetwork: PropTypes.string,

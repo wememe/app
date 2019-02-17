@@ -53,9 +53,41 @@
   right: 20px; }
 
 .canvas__controls__shares {
-  background-color: #ebebeb;
-  width: 100%;
-  height: 30%; }
+  background-color: #51b1ff;
+  width: calc(100% - 60px);
+  height: calc(80% - 80px);
+  padding: 40px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column; }
+
+.canvas__controls__shares__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+
+.noPadding {
+  padding: 0 !important;
+  width: 100%; }
+
+.sketch-picker {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent !important; }
+
+.canvas__controls__shares__brushSize {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-direction: column; }
+
+.sketchPicker {
+  display: flex;
+  justify-content: space-between !important;
+  align-items: center;
+  background-color: #51ffb7;
+  height: 80% !important; }
 
 .canvas__wrapper {
   display: flex;
@@ -64,8 +96,15 @@
   width: 90vw;
   position: relative; }
 
-.meme__metaData {
-  width: 90vw; }
+.canvas__context {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90vw;
+  height: 100px;
+  position: relative;
+  margin-top: 20px;
+  background-color: #ebebeb; }
 
 .canvas__canvas {
   width: 65%;
@@ -74,7 +113,7 @@
 
 .canvas__controls {
   width: 33%;
-  background-color: #d4d4d4;
+  background-color: #ebebeb;
   height: 50vh;
   position: relative; }
 

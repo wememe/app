@@ -167,12 +167,7 @@ class ProfilePublic extends Component {
                     </div>
                   </div>
 
-                  <div className="canvas__controls__shares">
-
-                  </div>
-
                   <div>
-                    {/* <Link to="/draw" className="canvas__save"> */}
                     <button
                       type="submit"
                       className="canvas__save"
@@ -181,7 +176,6 @@ class ProfilePublic extends Component {
                     >
                       Submit
                     </button>
-                    {/* </Link> */}
                   </div>
                 </React.Fragment>
               )
@@ -190,9 +184,8 @@ class ProfilePublic extends Component {
           </div>
         </div>
 
-        <div className="meme__metaData">
+        <div className="canvas__context">
         </div>
-
       </div>
     );
   }
