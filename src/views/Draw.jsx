@@ -40,12 +40,13 @@ class Draw extends Component {
     const canvasItems = document.getElementsByTagName('canvas')
     const base = canvasItems[3]
     const contextBase = base.getContext("2d");
-    const layer1 = canvasItems[2]
+    const layer1 = canvasItems[1]
     const layer2 = canvasItems[2]
+    console.log(contextBase)
     contextBase.drawImage(layer1, 0, 0);
     contextBase.drawImage(layer2, 0, 0);
     // const image = base.toDataURL("image/png");
-    const image = contextBase.toBlob(async (blob) => {
+    const image = base.toBlob(async (blob) => {
       console.log(blob)
       const formData = new FormData()
       formData.append('inputdata', blob, 'filename')
