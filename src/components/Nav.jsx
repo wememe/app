@@ -6,7 +6,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { handleSignOut } from '../state/actions';
 import * as routes from '../utils/routes';
 import { normalizeURL } from '../utils/funcs';
-import Profile from '../assets/Profile.svg';
+import Wememe from '../assets/wememe.png';
 import Pencil from '../assets/Pencil.svg';
 import SignOut from '../assets/SignOut.svg';
 import Add from '../assets/Add.svg';
@@ -45,7 +45,8 @@ class Nav extends Component {
       <nav className={`${showDownloadBanner ? 'bannerMargin' : ''}`}>
         <div id="nav__logo--marginLeft">
           <Link to="/">
-            <h2 className="landing__nav__logo">WeMeme</h2>
+            {/* <h2 className="landing__nav__logo">WeMeme</h2> */}
+            <img src={Wememe} alt="" className="landing__nav__logo"/>
           </Link>
           <Link to="/gallery">
             <p>Gallery</p>

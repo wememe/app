@@ -12,7 +12,8 @@ body {
   min-height: 100%;
   width: 100%;
   margin: 0 auto;
-  overflow: auto; }
+  overflow: auto;
+  background-color: #FFD900; }
 
 #root {
   width: 100%;
