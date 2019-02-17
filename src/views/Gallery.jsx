@@ -22,7 +22,7 @@ class Buy extends Component {
       <div className="buyPage">
 
         <div className="gallery__headline">
-          <h2>Meme Gallery</h2>
+          <h2>Sold Memes</h2>
           <p>Gander completed works by the community.</p>
         </div>
 

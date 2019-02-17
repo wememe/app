@@ -77,7 +77,7 @@
   flex-direction: column;
 }
 
-.canvas__controls__shares__wrapper{
+.canvas__controls__shares__wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -98,14 +98,14 @@
   background-color: transparent !important;
 }
 
-.canvas__controls__shares__brushSize{
+.canvas__controls__shares__brushSize {
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
   flex-direction: column;
 }
 
-.sketchPicker{
+.sketchPicker {
   display: flex;
   justify-content: space-between !important;
   align-items: center;
@@ -115,10 +115,11 @@
 
 .canvas__wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 90vw;
   position: relative;
+
 }
 
 .canvas__context {
@@ -161,15 +162,31 @@
 .canvas__buy {
   width: 100%;
   background-color: #d4d4d4;
-  height: 100%;
-  max-height: 70vh;
-  max-width: 90vw;
-  display: block;
-  object-fit: cover;
+  max-height: 500px;
+  width: auto;
   -webkit-transition: all .5s ease;
   -moz-transition: all .5s ease;
   -o-transition: all .5s ease;
   transition: all .5s ease;
+}
+
+.creators {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  h2 {
+    margin-right: 20px;
+  }
+}
+
+.creators__wrapper {
+  width: 60vw;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 40px;
 }
 
 .upper-canvas {

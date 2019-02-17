@@ -92,22 +92,8 @@ class ProfilePublic extends Component {
           && <FileSizeModal show={showFileSizeModal} closeFileSizeModal={this.closeFileSizeModal} />}
 
         <div className="create__guide">
-          <h2>Start your meme</h2>
+          <h2>Add an image</h2>
           <p>Begin by uploading an image you think would make for a great beginning of a meme.</p>
-        </div>
-
-        <div className="progress__wrapper">
-          <div className="progress__steps">
-            <p>Start</p>
-            <p>Draw</p>
-            <p>Caption</p>
-          </div>
-
-          <div className="progress__bar__wrapper">
-            <div className="progress__bar" />
-            <div className="progress__bar grey" />
-            <div className="progress__bar grey" />
-          </div>
         </div>
 
         <div className="canvas__wrapper">
@@ -134,7 +120,7 @@ class ProfilePublic extends Component {
                 ref={ref => this.coverUpload = ref}
               />
               <div className="canvas__upload">
-                Edit
+                Upload
               </div>
             </label>
           </div>
@@ -182,9 +168,6 @@ class ProfilePublic extends Component {
               : <img src={Kittie} alt="" />
             }
           </div>
-        </div>
-
-        <div className="canvas__context">
         </div>
       </div>
     );

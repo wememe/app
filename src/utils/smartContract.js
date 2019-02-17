@@ -616,65 +616,6 @@ const abi = [{
   }
 ]
 
-// ethereum.enable().then(addrs => {
-//   const addr = addrs[0]
-//   const asdf = 234
-//   user.innerHTML = `<threebox-address data-address='${addr}'></threebox-address>`
-//   const Wememe = web3.eth.contract(abi);
-//   const wememe = Wememe.at('0x7B55a715AD5e82956CA6F3093D7Eb3C16C308a78')
-
-//   shares.addEventListener('change', (e, r) => {
-//     wememe.priceToMint.call(pid.value, shares.value, {}, (e, price) => {
-//       wei.value = web3.fromWei(price, 'ether')
-//     })
-//   })
-
-//   meme.addEventListener('click', () => {
-//     wememe.priceToMint.call(mid.value, numShares.value, {}, (e, price) => {
-//       wememe.meme(mid.value, numShares.value, contentHash.value, {
-//         from: addr,
-//         value: price
-//       }, (e, tx) => {
-//         console.log('meme', tx)
-//       })
-//     })
-//   })
-
-//   buyMeme.addEventListener('click', () => {
-//     wememe.poolBalance.call(buyId.value, (e, price) => {
-//       wememe.buy(buyId.value, {
-//         from: addr,
-//         value: price
-//       }, (e, tx) => {
-//         console.log('buy', tx)
-//       })
-//     })
-//   })
-
-//   wememe.topId.call((e, r) => {
-//     const num = r.toNumber()
-//     for (let i = 0; i < num; i++) {
-//       wememe.num.call(i, (e, num) => {
-//         wememe.content.call(i, (e, content) => {
-//           wememe.poolBalance.call(i, (e, staked) => {
-//             if (num < 3) {
-//               memeData.innerHTML += `<div>id: ${i}, contribs: ${num}, content: ${content}, weiStaked: ${staked}  </div>`
-//             } else {
-//               if (staked.toNumber() === 0) {
-//                 wememe.ownerOf.call(i, (e, owner) => {
-//                   memeGallery.innerHTML += `<div>id: ${i}, content: ${content}, owner: ${owner}  </div>`
-//                 })
-//               } else {
-//                 memeStore.innerHTML += `<div>id: ${i}, content: ${content}, weiPrice: ${staked}  </div>`
-//               }
-//             }
-//           })
-//         })
-//       })
-//     }
-//   })
-// })
-
 export const startWeMeme = async () => {
   try {
     const addrs = await ethereum.enable() // eslint-disable-line no-undef
