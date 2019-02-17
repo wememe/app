@@ -11,33 +11,12 @@ class Draw extends Component {
     super(props);
     this.state = {
       disableSave: true,
-      showFileSizeModal: false,
     };
   }
 
-  closeFileSizeModal = () => {
-    this.setState({ showFileSizeModal: false });
-  }
-
-  handleUpdatePic = (photoFile, e) => {
-    if (photoFile.size <= 2500000) {
-      const formData = new window.FormData();
-      formData.append('path', photoFile);
-      this.setState({ disableSave: false });
-    } else {
-      e.target.value = null;
-      this.setState({ showFileSizeModal: true });
-    }
-  }
-
   render() {
-    const { disableSave, showFileSizeModal } = this.state;
-
     return (
       <div className="createPage">
-
-        {showFileSizeModal
-          && <FileSizeModal show={showFileSizeModal} closeFileSizeModal={this.closeFileSizeModal} />}
 
         <div className="create__guide">
           <h2>Draw on your meme</h2>
@@ -68,21 +47,6 @@ class Draw extends Component {
               />)
             : <div className="canvas" />
           }
-
-          <label htmlFor="coverInput" className="canvas__upload--wrapper">
-            <input
-              id="coverInput"
-              type="file"
-              name="coverPic"
-              className="light"
-              accept="image/*"
-              onChange={e => this.handleUpdatePic(e.target.files[0], e, true)}
-              ref={ref => this.coverUpload = ref}
-            />
-            <div className="canvas__upload">
-              Edit
-            </div>
-          </label>
         </div>
 
         <Link to="/caption">

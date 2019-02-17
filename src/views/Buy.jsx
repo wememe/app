@@ -17,21 +17,23 @@ class Buy extends Component {
 
   render() {
     return (
-      <div className="createPage">
+      <div className="buyPage">
 
         <div className="create__guide">
           <h2>Meme Market</h2>
           <p>Begin by uploading an image you think would make for a great beginning of a meme.</p>
         </div>
 
-        <MemeTile />
-        <MemeTile />
-        <MemeTile />
-        <MemeTile />
-        <MemeTile />
-        <MemeTile />
-        <MemeTile />
-        
+        <div className="buy__grid">
+          <MemeTile />
+          <MemeTile />
+          <MemeTile />
+          <MemeTile />
+          <MemeTile />
+          <MemeTile />
+          <MemeTile />
+        </div>
+
       </div>
     );
   }

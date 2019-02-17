@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as routes from './utils/routes';
-import { pollNetworkAndAddress, initialAddress } from './utils/address';
 import { normalizeURL, matchProtectedRoutes } from './utils/funcs';
+import { startWeMeme, getMemes } from './utils/smartContract';
 import { store } from './state/store';
 import Landing from './views/Landing';
 import MyProfile from './views/MyProfile';
@@ -20,6 +20,9 @@ import Privacy from './views/Privacy';
 import Terms from './views/Terms';
 import Create from './views/Create';
 import Buy from './views/Buy';
+import Gallery from './views/Gallery';
+import CaptionGallery from './views/CaptionGallery';
+import DrawGallery from './views/DrawGallery';
 import CreateImage from './views/CreateImage';
 import Caption from './views/Caption';
 import Draw from './views/Draw';
@@ -27,7 +30,6 @@ import Nav from './components/Nav';
 import history from './history';
 import './index.css';
 
-import AppModals from './components/AppModals';
 import {
   getProfileData,
   getPublicMemberSince,
@@ -70,36 +72,12 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const { location } = this.props;
-    const { pathname } = location;
-    const normalizedPath = normalizeURL(pathname);
-    const splitRoute = normalizedPath.split('/');
-    const isProtectedPath = matchProtectedRoutes(splitRoute[2]);
-    const currentEthAddress = window.localStorage.getItem('userEthAddress');
-
-    initialAddress(); // Initial get address
-    pollNetworkAndAddress(); // Start polling for address change
-
-    // Initial warning to users without web3
-    if (typeof window.web3 === 'undefined') {
-      this.props.handleDownloadMetaMaskBanner();
-    }
-
-    if (
-      typeof window.web3 !== 'undefined' // Has web3
-      && splitRoute.length > 1 // Route has more than one
-      && splitRoute[1].substring(0, 2) === '0x' // Lands on profile page
-      && isProtectedPath // Lands on protected page
-      && splitRoute[1] === currentEthAddress // Eth address is own
-    ) {
-      // Lands on protected route on their own profile and begins auto sign in process
-      this.directSignIn();
-    } else if (
-      splitRoute.length > 1 // Route has more than one
-      && splitRoute[1].substring(0, 2) === '0x') { // Lands on profile page
-      // Lands on base route and loads public profile
-      if (isProtectedPath) history.push(`/${splitRoute[1]}`);
-    }
+    await startWeMeme();
+    getMemes();
+    // get for draw
+    // get for caption
+    // get for gallery
+    // get for buy
   }
 
   componentWillReceiveProps(nextProps) {
@@ -256,7 +234,7 @@ class App extends Component {
             />
           ) :
         } */}
-        <AppModals
+        {/* <AppModals
           showDownloadBanner={showDownloadBanner}
           ifFetchingThreeBox={ifFetchingThreeBox}
           onSyncFinished={onSyncFinished}
@@ -297,7 +275,7 @@ class App extends Component {
           handleAccessModal={this.props.handleAccessModal}
           handleNextMobileModal={this.handleNextMobileModal}
           closeRequireMetaMaskModal={this.props.closeRequireMetaMaskModal}
-        />
+        /> */}
 
         <Nav />
 
@@ -333,6 +311,12 @@ class App extends Component {
 
           <Route
             exact
+            path="/gallery"
+            component={Gallery}
+          />
+
+          <Route
+            exact
             path="/buy"
             component={Buy}
           />
@@ -345,14 +329,26 @@ class App extends Component {
 
           <Route
             exact
-            path="/draw"
+            path="/draw/:memeId"
             component={Draw}
           />
 
           <Route
             exact
-            path="/caption"
+            path="/draw"
+            component={DrawGallery}
+          />
+
+          <Route
+            exact
+            path="/caption/:memeId"
             component={Caption}
+          />
+
+          <Route
+            exact
+            path="/caption"
+            component={CaptionGallery}
           />
 
           <Route
@@ -434,9 +430,7 @@ class App extends Component {
         </Switch>
 
         <Suspense fallback={<div>Loading...</div>}>
-          <Footer
-            isLoggedIn={isLoggedIn}
-          />
+          <Footer />
         </Suspense>
 
       </div>
@@ -560,6 +554,8 @@ const mapState = state => ({
   showDownloadBanner: state.threeBox.showDownloadBanner,
   onPublicProfilePage: state.threeBox.onPublicProfilePage,
   currentAddress: state.threeBox.currentAddress,
+  wememeContract: state.threeBox.wememeContract,
+  address: state.threeBox.address,
 });
 
 export default withRouter(connect(mapState,

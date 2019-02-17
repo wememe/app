@@ -43,6 +43,7 @@ class ProfilePublic extends Component {
           <h2>Start your meme</h2>
           <p>Begin by uploading an image you think would make for a great beginning of a meme.</p>
         </div>
+
         <div className="progress__wrapper">
           <div className="progress__steps">
             <p>Start</p>
@@ -85,12 +86,12 @@ class ProfilePublic extends Component {
           </label>
         </div>
 
-        <Link to="/draw">
+        <Link to="/draw" className="canvas__save">
           <button
             type="submit"
             // disabled={disableSave}
           >
-            Save
+            Submit
         </button>
         </Link>
 

@@ -12,16 +12,11 @@ import './styles/Footer.css';
 
 const Footer = () => (
   <div className="footer">
-
-    <div className="footer__gutter">
-
-      <ul className="footer__gutter__info">
-        <a href="www.3box.io">
-          <li>3Box 2018</li>
-        </a>
-      </ul>
-    </div>
-
+    <ul className="footer__gutter__info">
+      <a href="www.3box.io">
+        <li>Made with love by the 3Box team.</li>
+      </a>
+    </ul>
   </div>
 );
 

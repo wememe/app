@@ -7,8 +7,9 @@ import { handleSignOut } from '../state/actions';
 import * as routes from '../utils/routes';
 import { normalizeURL } from '../utils/funcs';
 import Profile from '../assets/Profile.svg';
-import Edit from '../assets/Edit.svg';
+import Pencil from '../assets/Pencil.svg';
 import SignOut from '../assets/SignOut.svg';
+import Add from '../assets/Add.svg';
 import './styles/Nav.css';
 
 class Nav extends Component {
@@ -46,16 +47,25 @@ class Nav extends Component {
           <Link to="/">
             <h2 className="landing__nav__logo">WeMeme</h2>
           </Link>
+          <Link to="/gallery">
+            <p>Gallery</p>
+          </Link>
         </div>
 
-        {
+        {/* {
           image.length > 0 && image[0].contentUrl ?
             <img src={`https://ipfs.infura.io/ipfs/${image[0].contentUrl['/']}`} className="nav__userPicture clearProfPic" alt="profile" onClick={this.handleDropdown} role="button" />
             : <div className="nav__userPicture" onClick={this.handleDropdown} />
-        }
+        } */}
+
+        <p
+          className="nav__userPicture"
+          onClick={this.handleDropdown} >
+          Create &#x25bc;
+        </p>
 
         {/* desktop nav dropdown */}
-        <div className={`${showProfileModal ? 'nav__dropdown--visible' : undefined} nav__dropdown nav__dropdown--desktop`}
+        {/* <div className={`${showProfileModal ? 'nav__dropdown--visible' : undefined} nav__dropdown nav__dropdown--desktop`}
           onClick={this.handleDropdown}>
           <ul>
             <Link to={`/${currentAddress}/${routes.ACTIVITY}`}>
@@ -76,12 +86,39 @@ class Nav extends Component {
               Sign Out
             </li>
           </ul>
+        </div> */}
+
+        <div className={`${showProfileModal ? 'nav__dropdown--visible' : undefined} nav__dropdown nav__dropdown--desktop`}
+          onClick={this.handleDropdown}>
+          <ul>
+            <Link to="/create">
+              <li className="nav__dropdown__wrapper">
+                <img src={Add} className="nav__dropdown__icon" alt="profile" role="button" />
+                Create
+              </li>
+            </Link>
+            <Link to="/draw">
+              <li className="nav__dropdown__wrapper">
+                <img src={Pencil} className="nav__dropdown__icon" alt="profile" role="button" />
+                Draw
+              </li>
+            </Link>
+            <Link to="/caption">
+              <li className="nav__dropdown__wrapper">
+                <img src={Pencil} className="nav__dropdown__icon" alt="profile" role="button" />
+                Caption
+              </li>
+            </Link>
+          </ul>
         </div>
 
         {showProfileModal &&
           <div className='onClickOutside' onClick={this.handleDropdown} />}
-
         <div id={showProfileModal ? 'dropdownContainer' : undefined} onClick={this.handleDropdown} />
+
+        {/* {showProfileModal &&
+          <div className='onClickOutside' onClick={this.handleDropdown} />}
+        <div id={showProfileModal ? 'dropdownContainer' : undefined} onClick={this.handleDropdown} /> */}
 
       </nav>
     );

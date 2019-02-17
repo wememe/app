@@ -1,18 +1,23 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const MemeTile = () => (
-  <div className="meme__tile">
-    <div className="meme__tile__image">
-      <img src="" alt="" />
+import Meme from '../assets/ethereum-meme.jpg'
+
+const MemeTile = ({ meme }) => (
+  <Link to={`/caption/${meme.id}`}>
+    <div className="meme__tile">
+      <div className="meme__tile__image--wrapper">
+        <img src={meme.content} alt="" className="meme__tile__image" />
+      </div>
+      <div className="meme__tile__info">
+        <h3>#{meme.id}</h3>
+        <p>{meme.staked} Wei</p>
+        <button type="button">
+          {meme.step}
+        </button>
+      </div>
     </div>
-    <div className="meme__tile__info">
-      <h3>#4356</h3>
-      <p>Backed by 4.5ETH</p>
-      <button type="button">
-        Caption
-      </button>
-    </div>
-  </div>
+  </Link>
 );
 
 export default MemeTile;

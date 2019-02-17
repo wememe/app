@@ -2,7 +2,6 @@ nav {
   position: fixed;
   width: 100vw;
   top: 0;
-  background-color: #fff;
   height: 68px;
   display: flex;
   align-items: center;
@@ -10,7 +9,7 @@ nav {
   nav button {
     display: inline-block; }
   nav p {
-    color: #1168df; }
+    margin-left: 15px; }
 
 .hideNav {
   display: none !important; }
@@ -74,14 +73,9 @@ nav {
   margin-right: 17px; }
 
 .nav__userPicture {
-  border-radius: 2px;
-  width: 40px;
-  height: 40px;
   margin: 14px 3vw 14px 14px;
   margin-left: auto;
-  cursor: pointer;
-  object-fit: cover;
-  background-color: #A736FF; }
+  cursor: pointer; }
 
 .nav__dropdown {
   transition: transform ease 0.9s, opacity ease 0.1s;
@@ -101,7 +95,6 @@ nav {
   .nav__dropdown li {
     font-size: 14px;
     padding-left: 1.3em;
-    color: #6b6b6b;
     line-height: 4em;
     font-weight: 400;
     cursor: pointer; }

@@ -1,15 +1,15 @@
 @import "../../variables.scss";
 
 .footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   width: 100vw;
   display: flex;
+  background-color: $weMemeYellow;
   align-items: center;
   justify-content: space-between;
-  flex-direction: column;
-  height: fit-content;
+  height: 50px;
 }
 
 .footer__tabs {
@@ -29,15 +29,6 @@
   background-color: $threeBoxBlueDeep;
   width: 100%;
   height: 150px;
-}
-
-.footer__gutter {
-  background-color: $weMemeYellow;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 50px;
 }
 
 .footer__gutter__info {
@@ -238,11 +229,11 @@
     display: none;
   }
 
-  .landing__developers{
+  .landing__developers {
     margin-bottom: 380px;
   }
 
-  .footer__gutter{
+  .footer__gutter {
     flex-direction: column-reverse;
     height: 120px;
     padding: 24px 0 24px 36px;
@@ -250,7 +241,7 @@
     align-items: flex-start;
   }
 
-  .footer__gutter__info{
+  .footer__gutter__info {
     padding: 12px 0;
     margin-left: 24px;
   }

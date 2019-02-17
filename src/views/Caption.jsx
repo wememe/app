@@ -85,7 +85,7 @@ class Draw extends Component {
           </label>
         </div>
 
-        <Link to="/sell">
+        <Link to="/buy">
           <button
             type="submit"
           // disabled={disableSave}

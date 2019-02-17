@@ -1,5 +1,23 @@
 export const threeBoxReducer = (state = {}, action) => {
   switch (action.type) {
+    case 'WEMEME_CONTRACT':
+      return {
+        ...state,
+        wememeContract: action.wememeContract,
+        address: action.address,
+        user: action.wememeContract,
+        profile: action.profile,
+      };
+
+    case 'UPDATE_MEMES':
+      return {
+        ...state,
+        forDraw: action.forDraw,
+        forCaption: action.forCaption,
+        forSale: action.forSale,
+        forGallery: action.forGallery,
+      };
+
     case 'CHECK_WALLET':
       return {
         ...state,
