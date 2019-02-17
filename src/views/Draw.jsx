@@ -17,8 +17,11 @@ class Draw extends Component {
       color: "#000000",
       width: 400,
       height: 400,
+      numberOfShares: 100,
+      shareValue: 0,
       brushRadius: 10,
       lazyRadius: 12,
+      memeId: this.props.history.location.pathname.split('/')[2]
       // TODO maybe some cross origin issues here to work out
       // imgSrc:"https://ipfs.infura.io/ipfs/Qmci55ieQdt8qZv5B9KuTotnsuqSUKMdmMPmjsS2x5U1pB"
     };
@@ -47,23 +50,49 @@ class Draw extends Component {
   }
 
   onColorChange = (obj) => {
-      this.setState({color: obj.hex})
+    this.setState({ color: obj.hex })
   }
 
   chooseWeight = (weight) => () => {
     console.log(weight)
     if (weight === 'small') {
-      this.setState({brushRadius: 5})
+      this.setState({ brushRadius: 5 })
       return
     }
-    if (weight === 'medium'){
-      this.setState({brushRadius: 10})
+    if (weight === 'medium') {
+      this.setState({ brushRadius: 10 })
       return
     }
-    if (weight === 'large'){
-      this.setState({brushRadius: 15})
+    if (weight === 'large') {
+      this.setState({ brushRadius: 15 })
       return
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { wememeContract } = nextProps;
+    const { memeId, canvas } = this.state;
+    let imageUrl;
+
+    wememeContract.content.call(memeId, (e, content) => {
+      imageUrl = content;
+      // const imageUrl = "https://ipfs.infura.io/ipfs/Qmci55ieQdt8qZv5B9KuTotnsuqSUKMdmMPmjsS2x5U1pB"
+      canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
+        // backgroundImageOpacity: 0.5,
+        // should the image be resized to fit the container?
+        // TODO not working....??
+        backgroundImageStreftch: true,
+        opacity: 0.5,
+        width: canvas.width,
+        height: canvas.height,
+        // angle: 45,
+        // left: 400,
+        // top: 400,
+        originX: 'left',
+        originY: 'top',
+        crossOrigin: 'anonymous'
+      });
+    })
   }
 
   render() {
@@ -92,14 +121,14 @@ class Draw extends Component {
 
         <div className="canvas__wrapper">
 
-        <CanvasDraw
-           ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
-           brushColor={this.state.color}
-           brushRadius={this.state.brushRadius}
-           lazyRadius={this.state.lazyRadius}
-           canvasWidth={this.state.canvasWidth}
-           canvasHeight={this.state.canvasHeight}
-           imgSrc={this.state.imgSrc}
+          <CanvasDraw
+            ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
+            brushColor={this.state.color}
+            brushRadius={this.state.brushRadius}
+            lazyRadius={this.state.lazyRadius}
+            canvasWidth={this.state.canvasWidth}
+            canvasHeight={this.state.canvasHeight}
+            imgSrc={this.state.imgSrc}
           />
 
 
@@ -111,7 +140,7 @@ class Draw extends Component {
 
 
 
-        <SketchPicker onChange={this.onColorChange}/>
+        <SketchPicker onChange={this.onColorChange} />
 
         <button onClick={this.drawUndo.bind(this)}> undo </button>
 
@@ -138,6 +167,7 @@ Draw.propTypes = {
   handleSignInBanner: PropTypes.func.isRequired,
   pathname: PropTypes.object,
   location: PropTypes.object,
+  wememeContract: PropTypes.object,
   isLoadingPublicProfile: PropTypes.bool,
   showSignInBanner: PropTypes.bool,
   currentAddress: PropTypes.string,
@@ -146,13 +176,14 @@ Draw.propTypes = {
 Draw.defaultProps = {
   pathname: {},
   location: {},
+  wememeContract: {},
   isLoadingPublicProfile: true,
   showSignInBanner: false,
   currentAddress: '',
 };
 
 const mapState = state => ({
-  // currentAddress: state.threeBox.currentAddress,
+  wememeContract: state.threeBox.wememeContract,
 });
 
 export default withRouter(connect(mapState,

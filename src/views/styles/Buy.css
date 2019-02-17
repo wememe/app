@@ -9,9 +9,9 @@
 
 .buy__grid {
   display: inline-grid;
-  grid-template-columns: repeat(3, 320px [col-start]);
-  width: 80vw;
-  max-width: 80vw;
+  grid-template-columns: repeat(3, 33.33333% [col-start]);
+  width: 90vw;
+  max-width: 90vw;
   margin-bottom: 100px; }
 
 .meme__tile {

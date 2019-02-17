@@ -8,6 +8,7 @@ import { SketchPicker } from 'react-color'
 
 
 import { FileSizeModal } from '../components/Modals';
+import Kittie from '../assets/Kittie.gif'
 import './styles/Create.css';
 
 const fabric = FabricLib.fabric
@@ -18,13 +19,14 @@ class Draw extends Component {
     this.state = {
       disableSave: true,
       showFileSizeModal: false,
-      canvas: null
+      numberOfShares: 100,
+      shareValue: 0,
+      canvas: null,
+      memeId: this.props.history.location.pathname.split('/')[2]
     };
   }
 
   componentDidMount() {
-    // const canvas = new fabric.Canvas('c');
-
     const canvas = new fabric.Canvas('c', {
       selection: false,
       uniScaleTransform: true,
@@ -32,26 +34,35 @@ class Draw extends Component {
       height: 400
     });
     canvas.uniScaleTransform = true;
-    // console.log(canvas)
     this.setState({ canvas });
-
-    const imageUrl = "https://ipfs.infura.io/ipfs/Qmci55ieQdt8qZv5B9KuTotnsuqSUKMdmMPmjsS2x5U1pB"
-    canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
-    // backgroundImageOpacity: 0.5,
-    // should the image be resized to fit the container?
-    // TODO not working....??
-    backgroundImageStreftch: true,
-    opacity: 0.5,
-    width: canvas.width,
-    height: canvas.height,
-    // angle: 45,
-    // left: 400,
-    // top: 400,
-    originX: 'left',
-    originY: 'top',
-    crossOrigin: 'anonymous'
-  });
   }
+
+  componentWillReceiveProps(nextProps) {
+    const { wememeContract } = nextProps;
+    const { memeId, canvas } = this.state;
+    let imageUrl;
+
+    wememeContract.content.call(memeId, (e, content) => {
+      imageUrl = content;
+      // const imageUrl = "https://ipfs.infura.io/ipfs/Qmci55ieQdt8qZv5B9KuTotnsuqSUKMdmMPmjsS2x5U1pB"
+      canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
+        // backgroundImageOpacity: 0.5,
+        // should the image be resized to fit the container?
+        // TODO not working....??
+        backgroundImageStreftch: true,
+        opacity: 0.5,
+        width: canvas.width,
+        height: canvas.height,
+        // angle: 45,
+        // left: 400,
+        // top: 400,
+        originX: 'left',
+        originY: 'top',
+        crossOrigin: 'anonymous'
+      });
+    })
+  }
+
 
   addText = () => {
     var newID = (new Date()).getTime().toString().substr(5);
@@ -67,7 +78,7 @@ class Draw extends Component {
     this.addLayer(newID, 'text');
   }
 
-  setTextParam =   (param, value) => {
+  setTextParam = (param, value) => {
     var obj = this.state.canvas.getActiveObject();
 
     if (obj) {
@@ -80,7 +91,7 @@ class Draw extends Component {
     }
   }
 
-  setTextValue =  (value) => {
+  setTextValue = (value) => {
     var obj = this.state.canvas.getActiveObject();
     if (obj) {
       obj.setText(value);
@@ -119,7 +130,7 @@ class Draw extends Component {
   }
 
   render() {
-    const { disableSave, showFileSizeModal } = this.state;
+    const { disableSave, showFileSizeModal, numberOfShares, shareValue } = this.state;
 
     return (
       <div className="createPage">
@@ -145,25 +156,84 @@ class Draw extends Component {
           </div>
         </div>
 
-        <div className="canvas__wrapper">
-          <div>
-            <canvas id="c" />
-          </div>
+        <div>
+          <canvas id="c" />
         </div>
 
         <button id="add" type="button" onClick={this.addText.bind(this)}>add</button>
 
         <select class="select2 font-change" data-type="fontFamily" onChange={this.fontChange.bind(this)}>
-  <option value="Arial">Arial</option>
-  <option value="Arial Black">Arial Black</option>
-  <option value="Impact">Impact</option>
-  <option value="Tahoma">Tahoma</option>
-  <option value="Times New Roman">Times New Roman</option>
-</select>
+          <option value="Arial">Arial</option>
+          <option value="Arial Black">Arial Black</option>
+          <option value="Impact">Impact</option>
+          <option value="Tahoma">Tahoma</option>
+          <option value="Times New Roman">Times New Roman</option>
+        </select>
 
-  <SketchPicker onChange={this.onColorChange}/>
+        <SketchPicker onChange={this.onColorChange} />
 
-  <button onClick={this.saveImage.bind(this)}> save </button>
+        <button onClick={this.saveImage.bind(this)}> save </button>
+
+        <div className="canvas__wrapper">
+          <div className="canvas__canvas">
+            {(this.coverUpload && this.coverUpload.files && this.coverUpload.files[0])
+              ? (
+                <img
+                  className="canvas"
+                  alt="profile"
+                  src={(this.coverUpload && this.coverUpload.files && this.coverUpload.files[0])
+                    && URL.createObjectURL(this.coverUpload.files[0])}
+                />)
+              : <div className="canvas" />
+            }
+          </div>
+
+          <div className="canvas__controls">
+
+            <div className="canvas__controls__shares">
+              <div>
+                <h3>Buy Shares</h3>
+                <p>How many shares do you want to buy in this meme?</p>
+                <p>Buy more shares to earn more when it sells</p>
+              </div>
+              <div>
+                <h4>{numberOfShares}</h4>
+                <p>Shares</p>
+                <input
+                  type="range"
+                  min="10"
+                  max="1000000000"
+                  value={numberOfShares}
+                  onChange={(e) => this.handleSlider(e)}
+                />
+              </div>
+              <div>
+                <p>This will cost</p>
+                <h4>{shareValue} Eth</h4>
+              </div>
+            </div>
+
+            <div className="canvas__controls__shares">
+              <img src={Kittie} alt="" />
+            </div>
+
+            <div>
+              {/* <Link to="/draw" className="canvas__save"> */}
+              <button
+                type="submit"
+                className="canvas__save"
+                disabled={disableSave}
+                onClick={() => this.createMeme()}
+              >
+                Submit
+            </button>
+              {/* </Link> */}
+            </div>
+          </div>
+        </div>
+
+        <div className="meme__metaData">
+        </div>
 
         <Link to="/sell">
           <button
@@ -184,6 +254,7 @@ Draw.propTypes = {
   getActivity: PropTypes.func.isRequired,
   handleSignInBanner: PropTypes.func.isRequired,
   pathname: PropTypes.object,
+  wememeContract: PropTypes.object,
   location: PropTypes.object,
   isLoadingPublicProfile: PropTypes.bool,
   showSignInBanner: PropTypes.bool,
@@ -193,13 +264,14 @@ Draw.propTypes = {
 Draw.defaultProps = {
   pathname: {},
   location: {},
+  wememeContract: {},
   isLoadingPublicProfile: true,
   showSignInBanner: false,
   currentAddress: '',
 };
 
 const mapState = state => ({
-  // currentAddress: state.threeBox.currentAddress,
+  wememeContract: state.threeBox.wememeContract,
 });
 
 export default withRouter(connect(mapState,
